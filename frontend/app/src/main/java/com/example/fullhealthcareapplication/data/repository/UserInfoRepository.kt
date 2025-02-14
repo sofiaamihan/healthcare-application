@@ -2,7 +2,7 @@ package com.example.fullhealthcareapplication.data.repository
 
 import android.util.Log
 import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
-import com.example.healthcare_application.data.repository.Result
+import com.example.fullhealthcareapplication.data.repository.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
