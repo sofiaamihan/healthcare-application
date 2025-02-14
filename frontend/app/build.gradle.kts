@@ -2,11 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.example.fullhealthcareapplication"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.fullhealthcareapplication"
@@ -40,6 +41,34 @@ android {
 }
 
 dependencies {
+
+    // View Model
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Paging Compose - EXTERNAL
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
+
+    // Datastore Preferences
+    implementation(libs.androidx.datastore.preferences)
+
+    // Google Fonts
+    implementation(libs.androidx.ui.text.google.fonts)
+
+    // Password Icon
+    implementation (libs.androidx.material.icons.extended)
+
+    // Rooms Database
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
