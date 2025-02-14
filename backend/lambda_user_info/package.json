@@ -1,0 +1,19 @@
+{
+  "name": "lambda_user_info",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.0",
+    "debug": "^4.4.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
