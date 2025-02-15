@@ -19,6 +19,12 @@ data class ContentResponse(
     val description: String
 )
 
+data class ContentCategoriesResponse(
+    val id: Int,
+    val name: String
+)
+
+
 sealed class Result<out R> {
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val exception: Exception) : Result<Nothing>()
@@ -70,6 +76,50 @@ class DiscoverServiceRepository(private val tokenDataStore: TokenDataStore) {
                 }
             } catch (e: Exception) {
                 Log.e("DiscoverServiceRepository", "Error getting content: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
+    suspend fun getAllContentCategories(): Result<List<ContentCategoriesResponse>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("$baseUrl/content-category")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Discover Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonArray = JSONArray(response)
+                    val contentList = mutableListOf<ContentCategoriesResponse>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonResponse = jsonArray.getJSONObject(i)
+                        val contentResponse = ContentCategoriesResponse(
+                            id = jsonResponse.getInt("id"),
+                            name = jsonResponse.getString("name")
+                        )
+                        contentList.add(contentResponse)
+                        Log.d("Got Category !!", "$contentResponse")
+                    }
+
+                    return@withContext Result.Success(contentList)
+                } else {
+                    Log.e("DiscoverServiceRepository", "Failed to get: $responseCode")
+                    return@withContext Result.Error(Exception("Failed to get categories: $responseCode"))
+                }
+            } catch (e: Exception) {
+                Log.e("DiscoverServiceRepository", "Error getting categories: ${e.localizedMessage}", e)
                 return@withContext Result.Error(e)
             }
         }

@@ -30,6 +30,7 @@ import com.example.fullhealthcareapplication.ui.components.NavigationDrawer
 import com.example.fullhealthcareapplication.R
 import com.example.fullhealthcareapplication.data.viewmodel.AddContentViewModel
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
+import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentCategoriesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentViewModel
 import com.example.fullhealthcareapplication.ui.components.AddContentDialog
 import kotlin.text.toIntOrNull
@@ -45,6 +46,7 @@ fun DiscoverScreen(
 ){
     val context = LocalContext.current
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
+    val getAllContentCategoriesViewModel: GetAllContentCategoriesViewModel = viewModel(factory = viewModelFactory)
     val state = getAllContentViewModel.state
 
     var showModal = remember { mutableStateOf(false) }
@@ -58,6 +60,7 @@ fun DiscoverScreen(
 
     LaunchedEffect(Unit) {
         getAllContentViewModel.getAllContent()
+        getAllContentCategoriesViewModel.getAllContentCategories()
     }
 
     NavigationDrawer(

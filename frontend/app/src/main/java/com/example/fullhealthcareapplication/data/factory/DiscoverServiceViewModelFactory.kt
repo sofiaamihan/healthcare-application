@@ -6,6 +6,7 @@ import com.example.fullhealthcareapplication.data.repository.DiscoverServiceRepo
 import com.example.fullhealthcareapplication.data.viewmodel.AddContentViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.DeleteContentViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.EditContentViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentCategoriesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -15,6 +16,9 @@ class DiscoverServiceViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(GetAllContentViewModel::class.java) -> GetAllContentViewModel(
+                discoverServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(GetAllContentCategoriesViewModel::class.java) -> GetAllContentCategoriesViewModel(
                 discoverServiceRepository
             ) as T
             modelClass.isAssignableFrom(AddContentViewModel::class.java) -> AddContentViewModel(

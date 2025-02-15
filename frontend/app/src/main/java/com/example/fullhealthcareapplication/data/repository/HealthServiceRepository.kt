@@ -150,7 +150,9 @@ class HealthServiceRepository(
         }
     }
 
-    suspend fun getUserMeasurements(id: Int): User? {
+    suspend fun getUserMeasurements(
+        id: Int
+    ): User? {
         return withContext(Dispatchers.IO) {
             return@withContext userDao.getUser(id)
         }
@@ -281,6 +283,9 @@ class HealthServiceRepository(
         }
     }
 
+    // TODO - Edit Activity
+    // TODO - Delete Activity
+
     suspend fun addMedication(
         userId: Int,
         timeId: Int,
@@ -336,6 +341,9 @@ class HealthServiceRepository(
             }
         }
     }
+
+    // TODO - Edit Medication
+    // TODO - Delete Medication
 
     suspend fun getCategories(): Result<List<CategoryResponse>> {
         return withContext(Dispatchers.IO) {

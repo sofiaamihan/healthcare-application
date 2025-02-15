@@ -6,6 +6,7 @@ import com.example.fullhealthcareapplication.data.repository.DiscoverServiceRepo
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.example.fullhealthcareapplication.data.repository.ContentCategoriesResponse
 import com.example.fullhealthcareapplication.data.repository.ContentResponse
 import com.example.fullhealthcareapplication.data.repository.Result
 import kotlinx.coroutines.launch
@@ -15,7 +16,8 @@ data class DiscoverResultState(
     var errorState: Boolean = false,
     var successState: Boolean = false,
     var errorMessage: String? = null,
-    var contentList: List<ContentResponse> = emptyList()
+    var contentList: List<ContentResponse> = emptyList(),
+    var categoriesList: List<ContentCategoriesResponse> = emptyList()
 )
 
 class GetAllContentViewModel(
@@ -38,6 +40,35 @@ class GetAllContentViewModel(
                     state = state.copy(
                         errorState = true,
                         errorMessage = "Get Content failed: ${response.exception.localizedMessage}"
+                    )
+                }
+            }
+
+            state = state.copy(loadingState = false)
+        }
+    }
+}
+
+class GetAllContentCategoriesViewModel(
+    private val discoverServiceRepository: DiscoverServiceRepository,
+) : ViewModel() {
+    var state by mutableStateOf(DiscoverResultState())
+
+    fun getAllContentCategories() {
+        viewModelScope.launch {
+            state = state.copy(loadingState = true)
+
+            when (val response = discoverServiceRepository.getAllContentCategories()) {
+                is Result.Success -> {
+                    state = state.copy(
+                        successState = true,
+                        categoriesList = response.data
+                    )
+                }
+                is Result.Error -> {
+                    state = state.copy(
+                        errorState = true,
+                        errorMessage = "Get Categories failed: ${response.exception.localizedMessage}"
                     )
                 }
             }
