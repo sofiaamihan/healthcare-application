@@ -22,28 +22,6 @@ exports.handler = (event, context, callback) => {
                 return callback(null, result);
             });
             break;
-
-        case 'GET /content/{id}':
-            // Gets one content based on the id.
-            sql = "SELECT * FROM `discover_service`.`content` WHERE id=?;";
-            con.query(sql, [event.pathParameters.id], function(err, result){
-                if (err) throw err;
-                // const singleContent = result[0]; 
-                // return callback(null, singleContent); 
-                return callback(null, result);
-            });
-            break;
-
-        case 'GET /content-category/{content_category_id}':
-            // Gets all content related to one category.
-            sql = "SELECT * FROM `discover_service`.`content` WHERE content_category_id=?;";
-            con.query(sql, [event.pathParameters.content_category_id], function(err, result){
-                if (err) throw err;
-                // const singleContent = result[0]; 
-                // return callback(null, singleContent); 
-                return callback(null, result);
-            });
-            break;
             
         case 'GET /content-category':
             // Gets all content.
