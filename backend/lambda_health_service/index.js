@@ -33,17 +33,6 @@ exports.handler = (event, context, callback) => {
             });
             break;
             
-        case 'GET /user/{id}':
-            // Gets the user's measurements to be displayed on their profile.
-            sql = "SELECT * FROM `health_service`.`user` WHERE id=?;";
-            con.query(sql, [event.pathParameters.id], function(err, result){
-                if (err) throw err;
-                // const singleUser = result[0]; // What exactly does this do...
-                // return callback(null, singleUser);
-                return callback(null, result);
-            });
-            break;
-            
         case 'PUT /user/{id}':
             // Edit the user's measurements via their profile.
             body = JSON.parse(event.body)
