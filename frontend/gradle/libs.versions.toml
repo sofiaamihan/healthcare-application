@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.37.0"
 agp = "8.7.3"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
@@ -19,6 +20,7 @@ roomRuntime = "2.6.1"
 runtimeLivedata = "1.7.7"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }

@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.room.ktx)
 
+    // Permissions for sensors
+    implementation(libs.accompanist.permissions)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
