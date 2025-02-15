@@ -20,8 +20,14 @@ jobs:
       - name: Remove existing node_modules folder from cloned project
         run: rm -rf ${{ github.workspace }}/node_modules/*
 
-      - name: Install dependencies based on package.json
+      - name: Install dependencies for lambda_discover_service
         run: cd backend && cd lambda_discover_service && npm install
 
-      - name: Run backend tests using Jest
+      - name: Run backend tests for lambda_discover_service using Jest
         run: cd backend && cd lambda_discover_service && npm test
+
+      - name: Install dependencies for lambda_health_service
+        run: cd backend && cd lambda_health_service && npm install
+
+      - name: Run backend tests for lambda_health_service using Jest
+        run: cd backend && cd lambda_health_service && npm test
