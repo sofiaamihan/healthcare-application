@@ -1,6 +1,5 @@
 package com.example.fullhealthcareapplication.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,15 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
@@ -26,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -96,6 +90,15 @@ fun BlogScreen(
         val categories = listOf(categoriesState.categoriesList)
         val category = categories[0].toString()
         val names = extractNamesFromResponse(category)
+        val bannerResId = when (contentCategoryId) {
+            1 -> R.drawable.diet1
+            2 -> R.drawable.exercise2
+            3 -> R.drawable.medicine3
+            4 -> R.drawable.mental_health4
+            5 -> R.drawable.environment5
+            6 -> R.drawable.disease6
+            else -> R.drawable.exercise2
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -108,13 +111,13 @@ fun BlogScreen(
                 IconButton(
                     onClick = { toDiscoverScreen() },
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(16.dp, top = 32.dp)
                 ) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
             }
             Image(
-                painter = painterResource(R.drawable.banner2),
+                painter = painterResource(bannerResId),
                 contentDescription = "Blog Image",
                 modifier = Modifier
                     .padding(bottom = 24.dp)
