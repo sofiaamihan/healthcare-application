@@ -68,6 +68,17 @@ fun HomeScreen(
     tokenDataStore: TokenDataStore
 ){
     var search = remember { mutableStateOf("") }
+    val buttons = listOf(
+        Triple("Physical", R.drawable.physical, toPhysical),
+        Triple("Mobility", R.drawable.mobility, toMobility),
+        Triple("Medicine", R.drawable.medicine, toMedication)
+    )
+
+    // Filter buttons based on the search input
+    val filteredButtons = buttons.filter {
+        it.first.contains(search.value, ignoreCase = true)
+    }
+
     val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
     val dateKeyFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dateKey = LocalDateTime.now().format(dateKeyFormatter)
@@ -143,16 +154,10 @@ fun HomeScreen(
                         .fillMaxWidth(0.9f),
                     value = search.value,
                     onValueChange = { search.value = it },
-                    label = { Text(stringResource(R.string.search)) },
+                    label = { Text("Search") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                     shape = RoundedCornerShape(32.dp),
                     colors = TextFieldDefaults.colors(
-//                    focusedTextColor = Color.White,
-//                    unfocusedTextColor = Color.White,
-//                    focusedIndicatorColor = Color.White,
-//                    unfocusedIndicatorColor = Color.White,
-//                    focusedLabelColor = Color.White,
-//                    unfocusedLabelColor = Color.White,
                         focusedContainerColor = MaterialTheme.colorScheme.background,
                         unfocusedContainerColor = MaterialTheme.colorScheme.background
                     ),
@@ -171,35 +176,16 @@ fun HomeScreen(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
-        ){ // I feel like there should be a more efficient way to do this:
-            Row (
-                modifier = Modifier.padding(bottom = 10.dp)
-            ){
-                BigButton(
-                    stringResource(R.string.physical),
-                    R.drawable.physical,
-                    toSensorScreen = {toPhysical()}
-                )
-            }
-            Row (
-                modifier = Modifier.padding(bottom = 10.dp)
-            ){
-                BigButton(
-                    stringResource(R.string.mobility),
-                    R.drawable.mobility,
-                    toSensorScreen = {toMobility()}
-                )
-            }
-            Row (
-                modifier = Modifier.padding(bottom = 10.dp)
-            ){
-                BigButton(
-                    stringResource(R.string.medicine),
-                    R.drawable.medicine,
-                    toSensorScreen = {toMedication()}
-                )
+        ){
+            filteredButtons.forEach { (label, icon, action) ->
+                Row (
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ){
+                    BigButton(label, icon, toSensorScreen = { action() })
+                }
             }
         }
+
     }
 
 }
