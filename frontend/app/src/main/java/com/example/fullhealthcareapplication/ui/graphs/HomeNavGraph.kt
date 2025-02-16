@@ -152,7 +152,9 @@ fun HomeNavGraph(
             PhysicalScreen(
                 toHome = {
                     navController.navigate(BottomNavigationScreen.Home.route)
-                }
+                },
+                healthServiceViewModelFactory = healthServiceViewModelFactory,
+                tokenDataStore = tokenDataStore
             )
         }
         composable(route = SensorScreen.Mobility.route){

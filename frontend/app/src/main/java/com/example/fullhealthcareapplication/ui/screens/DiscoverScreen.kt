@@ -49,8 +49,9 @@ fun DiscoverScreen(
 ){
     val context = LocalContext.current
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
-    val getAllContentCategoriesViewModel: GetAllContentCategoriesViewModel = viewModel(factory = viewModelFactory)
+//    val getAllContentCategoriesViewModel: GetAllContentCategoriesViewModel = viewModel(factory = viewModelFactory)
     val state = getAllContentViewModel.state
+//    val categoryState = getAllContentCategoriesViewModel.state
 
     var showModal = remember { mutableStateOf(false) }
     val contentCategoryId = remember { mutableIntStateOf(0) }
@@ -65,7 +66,7 @@ fun DiscoverScreen(
 
     LaunchedEffect(Unit) {
         getAllContentViewModel.getAllContent()
-        getAllContentCategoriesViewModel.getAllContentCategories()
+//        getAllContentCategoriesViewModel.getAllContentCategories()
         role.value = tokenDataStore.getRole.first().toString()
     }
 

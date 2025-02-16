@@ -35,8 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fullhealthcareapplication.ui.components.AppBar
 import android.graphics.Paint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.geometry.Offset
@@ -47,13 +51,40 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
+import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
+import com.example.fullhealthcareapplication.data.viewmodel.GetAllActivitiesViewModel
 import com.example.fullhealthcareapplication.ui.components.StepCounterBarGraph
+import kotlinx.coroutines.flow.first
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PhysicalScreen(
-    toHome: () -> Unit
+    toHome: () -> Unit,
+    healthServiceViewModelFactory: HealthServiceViewModelFactory,
+    tokenDataStore: TokenDataStore
+
 ){
+    val dateKeyFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dateKey = LocalDateTime.now().format(dateKeyFormatter)
+    val caloriesBurnt = remember { mutableDoubleStateOf(0.0) }
+    val stepCount = remember { mutableDoubleStateOf(0.0) }
+    val distance = remember { mutableDoubleStateOf(0.0) }
+    val getAllActivitiesViewModel: GetAllActivitiesViewModel = viewModel(factory = healthServiceViewModelFactory)
+    val state = getAllActivitiesViewModel.state
+
+    LaunchedEffect(Unit) {
+        getAllActivitiesViewModel.getAllActivities(
+            tokenDataStore.getId.first()?.toInt() ?: 0,
+            dateKey.toString())
+    }
+
+
+
     val horizontalGradientBrush = Brush.horizontalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primaryContainer,
@@ -171,7 +202,7 @@ fun PhysicalScreen(
                 fontSize = 12.sp,
                 lineHeight = 14.sp)
             Text(
-                "200",
+                "${state.cachedActivityList.firstOrNull()?.caloriesBurnt ?: 0.0}",
                 fontSize = 12.sp,
                 lineHeight = 14.sp
             )
