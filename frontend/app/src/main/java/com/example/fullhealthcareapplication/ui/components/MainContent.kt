@@ -37,6 +37,7 @@ import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModel
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
 import com.example.fullhealthcareapplication.data.viewmodel.AddActivityViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.BottomNavigationScreen
 import kotlinx.coroutines.flow.first
 
@@ -49,7 +50,8 @@ fun MainContent(
     userInfoViewModelFactory: UserInfoViewModelFactory,
     healthServiceViewModelFactory: HealthServiceViewModelFactory,
     tokenDataStore: TokenDataStore,
-    toSignOut: () -> Unit
+    toSignOut: () -> Unit,
+    sensorViewModel: SensorViewModel
 ){
     var search = remember { mutableStateOf("") }
     val addActivityViewModel: AddActivityViewModel = viewModel(factory = healthServiceViewModelFactory)
@@ -91,7 +93,8 @@ fun MainContent(
             userInfoViewModelFactory = userInfoViewModelFactory,
             tokenDataStore = tokenDataStore,
             toSignOut = toSignOut,
-            healthServiceViewModelFactory = healthServiceViewModelFactory
+            healthServiceViewModelFactory = healthServiceViewModelFactory,
+            sensorViewModel = sensorViewModel
         )
     }
 

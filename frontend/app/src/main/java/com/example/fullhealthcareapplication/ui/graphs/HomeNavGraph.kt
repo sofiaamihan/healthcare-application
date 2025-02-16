@@ -13,6 +13,7 @@ import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
+import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.BottomNavigationScreen
 import com.example.fullhealthcareapplication.ui.screens.BlogScreen
 import com.example.fullhealthcareapplication.ui.screens.DiscoverScreen
@@ -33,7 +34,8 @@ fun HomeNavGraph(
     userInfoViewModelFactory: UserInfoViewModelFactory,
     healthServiceViewModelFactory: HealthServiceViewModelFactory,
     tokenDataStore: TokenDataStore,
-    toSignOut: () -> Unit
+    toSignOut: () -> Unit,
+    sensorViewModel: SensorViewModel
     ){
     NavHost(
         navController = navController,
@@ -157,7 +159,8 @@ fun HomeNavGraph(
             MobilityScreen(
                 toHome = {
                     navController.navigate(BottomNavigationScreen.Home.route)
-                }
+                },
+                sensorViewModel = sensorViewModel
             )
         }
         composable(route = SensorScreen.Medication.route){

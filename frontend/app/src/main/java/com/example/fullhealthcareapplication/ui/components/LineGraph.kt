@@ -78,7 +78,7 @@ fun Graph(
             for (i in xValues.indices) {
                 drawContext.canvas.nativeCanvas.drawText(
                     "${xValues[i]}",
-                    xAxisSpace * (i + 1),
+                    xAxisSpace * (i),
                     size.height - 30,
                     textPaint
                 )

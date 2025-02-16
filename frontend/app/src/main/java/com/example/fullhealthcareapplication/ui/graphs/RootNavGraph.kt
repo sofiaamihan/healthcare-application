@@ -12,6 +12,7 @@ import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
+import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.MainContent
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,8 @@ fun RootNavigationGraph(
     userInfoViewModelFactory: UserInfoViewModelFactory,
     discoverServiceViewModelFactory: DiscoverServiceViewModelFactory,
     healthServiceViewModelFactory: HealthServiceViewModelFactory,
-    tokenDataStore: TokenDataStore
+    tokenDataStore: TokenDataStore,
+    sensorViewModel: SensorViewModel
 ){
     val coroutineScope = rememberCoroutineScope()
     NavHost(
@@ -48,7 +50,8 @@ fun RootNavigationGraph(
                             popUpTo(Graph.ROOT) { inclusive = true }
                         }
                     }
-                }
+                },
+                sensorViewModel = sensorViewModel
             )
         }
     }

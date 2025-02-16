@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.AppBar
 import com.example.fullhealthcareapplication.ui.components.Graph
 import com.example.fullhealthcareapplication.ui.components.GraphAppearance
@@ -30,8 +34,12 @@ import kotlin.random.Random
 
 @Composable
 fun MobilityScreen(
-    toHome: () -> Unit
+    toHome: () -> Unit,
+    sensorViewModel: SensorViewModel
 ){
+    val accValues by sensorViewModel.accelerometerData.collectAsState()
+
+
     val horizontalGradientBrush = Brush.horizontalGradient(
         colors = listOf(
             MaterialTheme.colorScheme.primaryContainer,
@@ -169,6 +177,23 @@ fun MobilityScreen(
                     MaterialTheme.colorScheme.background
                 )
             )
+//                                Graph(
+//                        modifier = Modifier.fillMaxSize(),
+//                        xValues = listOf(0, 1, 2), // X, Y, Z labels
+//                        yValues = (0..10).toList(), // Dummy Y axis labels
+//                        points = accValues, // Dynamic values from accelerometer
+//                        paddingSpace = 16.dp,
+//                        verticalStep = 1,
+//                        graphAppearance = GraphAppearance(
+//                            graphColor = MaterialTheme.colorScheme.secondary,
+//                            graphAxisColor = Color.Black,
+//                            graphThickness = 4f,
+//                            iscolorAreaUnderChart = true,
+//                            colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+//                            isCircleVisible = true,
+//                            circleColor = MaterialTheme.colorScheme.primary,
+//                            backgroundColor = MaterialTheme.colorScheme.background
+//                        ))
         }
         // ---------- TEMP GRAPH ----------
     }
