@@ -30,19 +30,22 @@ import com.example.fullhealthcareapplication.ui.components.NavigationDrawer
 import com.example.fullhealthcareapplication.R
 import com.example.fullhealthcareapplication.data.viewmodel.AddContentViewModel
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
+import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentCategoriesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentViewModel
 import com.example.fullhealthcareapplication.ui.components.AddContentDialog
+import kotlinx.coroutines.flow.first
 import kotlin.text.toIntOrNull
 
 @Composable
 fun DiscoverScreen(
+    tokenDataStore: TokenDataStore,
     toProfile: () -> Unit,
     toHealthLogs: () -> Unit,
     toHealthReport: () -> Unit,
     toHome: () -> Unit,
     viewModelFactory: DiscoverServiceViewModelFactory,
-    toBlogScreen: (Int, String, String, String, Int) -> Unit
+    toBlogScreen: (Int, String, String, String, Int, String) -> Unit,
 ){
     val context = LocalContext.current
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
@@ -56,11 +59,14 @@ fun DiscoverScreen(
     val description = remember { mutableStateOf("") }
     val picture = remember { mutableStateOf("") }
 
+    val role = remember { mutableStateOf("") }
+
     val addContentViewModel: AddContentViewModel = viewModel(factory = viewModelFactory)
 
     LaunchedEffect(Unit) {
         getAllContentViewModel.getAllContent()
         getAllContentCategoriesViewModel.getAllContentCategories()
+        role.value = tokenDataStore.getRole.first().toString()
     }
 
     NavigationDrawer(
@@ -70,41 +76,51 @@ fun DiscoverScreen(
         toHealthReport = {toHealthReport()},
         toHome = {toHome()}
     ){ padding ->
-        // ----- ANYTHING BELOW SHOULD ONLY BE AVAILABLE TO THE ADMIN -----
-        Box(
-            modifier = Modifier
-                .padding(top = 200.dp)
-                .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(color = MaterialTheme.colorScheme.secondaryContainer),
-        ){
-            Column (
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+        if (role.value == "Admin"){
+            Box(
+                modifier = Modifier
+                    .padding(top = 200.dp)
+                    .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer),
             ){
-                Button(
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .height(50.dp)
-                        .fillMaxWidth(0.9f),
-                    onClick = {
-                        title.value = ""
-                        summary.value = ""
-                        description.value = ""
-                        showModal.value = true
-                    },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                ) {
-                    Text("Add Content")
+                Column (
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Button(
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .height(50.dp)
+                            .fillMaxWidth(0.9f),
+                        onClick = {
+                            title.value = ""
+                            summary.value = ""
+                            description.value = ""
+                            showModal.value = true
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Text("Add Content")
+                    }
                 }
             }
+        } else {
+            Box(
+                modifier = Modifier
+                    .padding(top = 200.dp)
+                    .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+                    .fillMaxWidth()
+                    .height(20.dp) // -60
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer),
+            ){
+            }
         }
-        // ----- ANYTHING ABOVE SHOULD ONLY BE AVAILABLE TO THE ADMIN -----
         Column (
             modifier = Modifier
-                .padding(top = 280.dp)
+                .padding(top = if (role.value == "Admin") 280.dp else 220.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -144,9 +160,11 @@ fun DiscoverScreen(
                                         state.contentList[index].title,
                                         state.contentList[index].summary,
                                         state.contentList[index].description,
-                                        state.contentList[index].contentCategoryId
+                                        state.contentList[index].contentCategoryId,
+                                        role.value
                                     )
-                                }
+                                },
+                                role = role.value
                             )
                         }
                     }

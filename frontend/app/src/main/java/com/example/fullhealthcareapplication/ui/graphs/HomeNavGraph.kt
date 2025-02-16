@@ -69,6 +69,7 @@ fun HomeNavGraph(
         }
         composable(route = BottomNavigationScreen.Discover.route){
             DiscoverScreen(
+                tokenDataStore = tokenDataStore,
                 toProfile = {
                     navController.navigate(DrawerScreen.Profile.route)
                 },
@@ -82,16 +83,17 @@ fun HomeNavGraph(
                     navController.navigate(BottomNavigationScreen.Home.route)
                 },
                 viewModelFactory = discoverServiceViewModelFactory,
-            ){ id, title, summary, description, contentCategoryId ->
-                navController.navigate("${DiscoverScreen.Blog.route}/$id/$title/$summary/$description/$contentCategoryId")
+            ){ id, title, summary, description, contentCategoryId, role->
+                navController.navigate("${DiscoverScreen.Blog.route}/$id/$title/$summary/$description/$contentCategoryId/$role")
             }
         }
-        composable(route = "${DiscoverScreen.Blog.route}/{id}/{title}/{summary}/{description}/{contentCategoryId}"){ backStackEntry ->
+        composable(route = "${DiscoverScreen.Blog.route}/{id}/{title}/{summary}/{description}/{contentCategoryId}/{role}"){ backStackEntry ->
             val id: String = backStackEntry.arguments?.getString("id") ?: "0"
             val title: String = backStackEntry.arguments?.getString("title") ?: ""
             val summary: String = backStackEntry.arguments?.getString("summary") ?: ""
             val description: String = backStackEntry.arguments?.getString("description") ?: ""
             val contentCategoryId: String = backStackEntry.arguments?.getString("contentCategoryId") ?: "0"
+            val role: String = backStackEntry.arguments?.getString("role") ?: ""
             BlogScreen(
                 id = id.toInt(),
                 title = title,
@@ -101,7 +103,8 @@ fun HomeNavGraph(
                 viewModelFactory = discoverServiceViewModelFactory,
                 toDiscoverScreen = {
                     navController.navigate(BottomNavigationScreen.Discover.route)
-                }
+                },
+                role = role
             )
         }
         composable(route = DrawerScreen.Profile.route){

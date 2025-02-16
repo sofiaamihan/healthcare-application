@@ -31,6 +31,7 @@ fun DiscoverButton(
     summary: String,
     description: String,
     contentCategoryId: Int,
+    role: String,
     toBlog: () -> Unit
 ){
     Card (

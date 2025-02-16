@@ -47,7 +47,8 @@ fun BlogScreen(
     description: String = "",
     contentCategoryId: Int = 1,
     toDiscoverScreen: () -> Unit,
-    viewModelFactory: DiscoverServiceViewModelFactory
+    viewModelFactory: DiscoverServiceViewModelFactory,
+    role: String = ""
 ){
     val contentCategoryIdState = remember { mutableIntStateOf(0) }
     val titleState = remember { mutableStateOf("") }
@@ -92,31 +93,33 @@ fun BlogScreen(
                 .fillMaxHeight(0.3f),
             contentScale = ContentScale.FillWidth
         )
-        Row(
-            modifier = Modifier
-                .padding(start = 32.dp, end = 32.dp, bottom = 24.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            FilledTonalButton(
-                onClick = {
-                    showEditContentModal.value = true
-                },
+        if (role == "Admin"){
+            Row(
                 modifier = Modifier
-                    .width(150.dp)
-            ) {
-                Text("Edit")
-            }
-            FilledTonalButton(
-                onClick = {
-                    deleteContentViewModel.deleteContent(id)
-                    toDiscoverScreen()
-                },
-                modifier = Modifier
-                    .width(150.dp)
-            ) {
-                Text("Delete")
+                    .padding(start = 32.dp, end = 32.dp, bottom = 24.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                FilledTonalButton(
+                    onClick = {
+                        showEditContentModal.value = true
+                    },
+                    modifier = Modifier
+                        .width(150.dp)
+                ) {
+                    Text("Edit")
+                }
+                FilledTonalButton(
+                    onClick = {
+                        deleteContentViewModel.deleteContent(id)
+                        toDiscoverScreen()
+                    },
+                    modifier = Modifier
+                        .width(150.dp)
+                ) {
+                    Text("Delete")
+                }
             }
         }
         BlogTitle(title)

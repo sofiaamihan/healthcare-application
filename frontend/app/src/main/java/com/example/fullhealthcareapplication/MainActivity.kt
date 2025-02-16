@@ -46,30 +46,31 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class MainActivity : ComponentActivity() , SensorEventListener{
+class MainActivity : ComponentActivity() {
+//    , SensorEventListener{
 
-    private lateinit var outputDirectory: File
-    private lateinit var cameraExecutor: ExecutorService
-    
-    private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
-
-    private val requestPermissionsLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ){ isGranted ->
-        if(isGranted){
-            Log.i("User", "Permission Granted")
-            shouldShowCamera.value = true
-        } else {
-            Log.i("User", "Permission Denied")
-        }
-    }
-
-    private val sensorManager: SensorManager by lazy {
-        getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    }
+//    private lateinit var outputDirectory: File
+//    private lateinit var cameraExecutor: ExecutorService
+//
+//    private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
+//
+//    private val requestPermissionsLauncher = registerForActivityResult(
+//        ActivityResultContracts.RequestPermission()
+//    ){ isGranted ->
+//        if(isGranted){
+//            Log.i("User", "Permission Granted")
+//            shouldShowCamera.value = true
+//        } else {
+//            Log.i("User", "Permission Denied")
+//        }
+//    }
+//
+//    private val sensorManager: SensorManager by lazy {
+//        getSystemService(Context.SENSOR_SERVICE) as SensorManager
+//    }
 //
 //    private val sensor: Sensor? = null
-    private val counter = MutableStateFlow<Int>(0)
+//    private val counter = MutableStateFlow<Int>(0)
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -137,9 +138,9 @@ class MainActivity : ComponentActivity() , SensorEventListener{
                 )
             }
         }
-        requestCameraPermission()
-        outputDirectory = getOutputDirectory()
-        cameraExecutor = Executors.newSingleThreadExecutor()
+//        requestCameraPermission()
+//        outputDirectory = getOutputDirectory()
+//        cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
 
@@ -148,53 +149,53 @@ class MainActivity : ComponentActivity() , SensorEventListener{
 //        sensorManager.unregisterListener(this)
 //    }
 
-    override fun onSensorChanged(sensorEvent: SensorEvent?) {
-        sensorEvent?.let { event ->
-            if(event.sensor.type== Sensor.TYPE_STEP_DETECTOR){
-                counter.update { it.plus(1) }
-            }
-        }
-    }
+//    override fun onSensorChanged(sensorEvent: SensorEvent?) {
+//        sensorEvent?.let { event ->
+//            if(event.sensor.type== Sensor.TYPE_STEP_DETECTOR){
+//                counter.update { it.plus(1) }
+//            }
+//        }
+//    }
+//
+//    override fun onAccuracyChanged(p0: Sensor?, p1: Int){
+//        TODO("Implement in the future")
+//    }
+//
+//    private fun requestCameraPermission() {
+//        when {
+//            ContextCompat.checkSelfPermission(
+//                this,
+//                android.Manifest.permission.CAMERA
+//            ) == PackageManager.PERMISSION_GRANTED -> {
+//                Log.i("User", "Permission previously granted")
+//                shouldShowCamera.value = true
+//            }
+//
+//            ActivityCompat.shouldShowRequestPermissionRationale(
+//                this,
+//                android.Manifest.permission.CAMERA
+//            ) -> Log.i ("User", "Show camera permissions dialog")
+//
+//            else -> requestPermissionsLauncher.launch(android.Manifest.permission.CAMERA)
+//        }
+//    }
 
-    override fun onAccuracyChanged(p0: Sensor?, p1: Int){
-        TODO("Implement in the future")
-    }
-
-    private fun requestCameraPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                Log.i("User", "Permission previously granted")
-                shouldShowCamera.value = true
-            }
-
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                android.Manifest.permission.CAMERA
-            ) -> Log.i ("User", "Show camera permissions dialog")
-
-            else -> requestPermissionsLauncher.launch(android.Manifest.permission.CAMERA)
-        }
-    }
-
-    private fun handleImageCapture(uri: Uri){
-        Log.i("User", "Image captured: $uri")
-        shouldShowCamera.value = false
-    }
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull().let {
-            File(it, resources.getString(R.string.app_name)).apply{ mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
+//    private fun handleImageCapture(uri: Uri){
+//        Log.i("User", "Image captured: $uri")
+//        shouldShowCamera.value = false
+//    }
+//
+//    private fun getOutputDirectory(): File {
+//        val mediaDir = externalMediaDirs.firstOrNull().let {
+//            File(it, resources.getString(R.string.app_name)).apply{ mkdirs() }
+//        }
+//        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        cameraExecutor.shutdown()
+//    }
 
 }
 
