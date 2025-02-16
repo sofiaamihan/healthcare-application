@@ -28,7 +28,7 @@ fun RootNavigationGraph(
     NavHost(
         navController = navController,
         route = Graph.ROOT,
-        startDestination = Graph.AUTHENTICATION // Change this whenever you want to test screens
+        startDestination = Graph.HOME // Change this whenever you want to test screens
     ){
         authNavGraph(
             navController = navController,

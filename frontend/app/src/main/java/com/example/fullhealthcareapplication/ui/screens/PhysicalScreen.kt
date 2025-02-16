@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fullhealthcareapplication.ui.components.AppBar
 import android.graphics.Paint
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import com.example.fullhealthcareapplication.ui.components.StepCounterBarGraph
 import kotlin.random.Random
 
 @Composable
@@ -109,10 +111,45 @@ fun PhysicalScreen(
                 }
             }
         }
+        val daysOfWeek = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val stepCounts = listOf(3000, 5000, 7000, 4000, 6000, 8000, 2000) // Fake data
+
+//        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text(
+//                text = "Weekly Step Count",
+//                textAlign = TextAlign.Start,
+//                fontSize = 20.sp,
+//                fontWeight = FontWeight.Bold
+//            )
+//            Spacer(modifier = Modifier.height(16.dp))
+//            StepCounterBarGraph(stepCounts = stepCounts, days = daysOfWeek)
+//        }
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 10.dp),
+                .padding(top = 24.dp, start = 24.dp, end = 24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "Weekly Step Count",
+                textAlign = TextAlign.Start,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row (
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            StepCounterBarGraph(stepCounts = stepCounts, days = daysOfWeek)
+        }
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, start = 24.dp, end = 24.dp, bottom = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -173,40 +210,6 @@ fun PhysicalScreen(
                 lineHeight = 14.sp
             )
         }
-        // ---------- TEMP GRAPH ----------
-        val yStep = 50
-        val random = Random
-        val points = (0..9).map {
-            var num = random.nextInt(350)
-            if (num <= 50)
-                num += 100
-            num.toFloat()
-        }
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.DarkGray)
-        ) {
-            Graph(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp),
-                xValues = (0..9).map { it + 1 },
-                yValues = (0..6).map { (it + 1) * yStep },
-                points = points,
-                paddingSpace = 16.dp,
-                verticalStep = yStep,
-                graphAppearance = GraphAppearance(
-                    Color.White,
-                    MaterialTheme.colorScheme.primary,
-                    1f,
-                    true,
-                    MaterialTheme.colorScheme.primary,
-                    false,
-                    MaterialTheme.colorScheme.secondary,
-                    MaterialTheme.colorScheme.background
-                )
-            )
-        }
-        // ---------- TEMP GRAPH ----------
     }
 }
 
