@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,11 +49,8 @@ fun DiscoverScreen(
     viewModelFactory: DiscoverServiceViewModelFactory,
     toBlogScreen: (Int, String, String, String, Int, String) -> Unit,
 ){
-    val context = LocalContext.current
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
-//    val getAllContentCategoriesViewModel: GetAllContentCategoriesViewModel = viewModel(factory = viewModelFactory)
     val state = getAllContentViewModel.state
-//    val categoryState = getAllContentCategoriesViewModel.state
 
     var showModal = remember { mutableStateOf(false) }
     val contentCategoryId = remember { mutableIntStateOf(0) }
@@ -66,7 +65,6 @@ fun DiscoverScreen(
 
     LaunchedEffect(Unit) {
         getAllContentViewModel.getAllContent()
-//        getAllContentCategoriesViewModel.getAllContentCategories()
         role.value = tokenDataStore.getRole.first().toString()
     }
 
@@ -126,9 +124,21 @@ fun DiscoverScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             if (state.loadingState) {
-                Text("Loading content...")
+                Column (
+                    modifier = Modifier.padding(top = 100.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    CircularProgressIndicator()
+                }
             } else if (state.errorState) {
-                Text("Error: ${state.errorMessage}")
+                Column (
+                    modifier = Modifier.padding(top = 100.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Text("Error: ${state.errorMessage}")
+                }
             } else {
                 LazyColumn(
                     modifier = Modifier
