@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fullhealthcareapplication.ui.components.AppBar
+import com.example.fullhealthcareapplication.ui.components.Graph
+import com.example.fullhealthcareapplication.ui.components.GraphAppearance
 import kotlin.random.Random
 
 @Composable
