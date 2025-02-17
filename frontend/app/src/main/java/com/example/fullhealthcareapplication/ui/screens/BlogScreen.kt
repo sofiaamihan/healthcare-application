@@ -218,6 +218,7 @@ fun BlogScreen(
                         picture
                     )
                     showEditContentModal.value = false
+                    toDiscoverScreen()
                 },
                 id = id,
                 contentCategoryId = contentCategoryIdState.intValue,
@@ -229,7 +230,7 @@ fun BlogScreen(
                 description = descriptionState.value,
                 onDescriptionChange = { descriptionState.value = it },
                 picture = pictureState.value,
-                onPictureChange = { pictureState.value = it }
+                onPictureChange = { pictureState.value = it },
             )
         }
     }
