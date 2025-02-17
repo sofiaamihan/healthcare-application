@@ -1,6 +1,9 @@
 package com.example.fullhealthcareapplication.ui.graphs
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,15 +17,17 @@ import com.example.fullhealthcareapplication.ui.screens.SignUpScreen
 import com.example.fullhealthcareapplication.ui.screens.WelcomeScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class)
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
     userInfoViewModelFactory: UserInfoViewModelFactory,
     healthServiceViewModelFactory: HealthServiceViewModelFactory
 ){
+
     navigation(
         route = Graph.AUTHENTICATION,
-        startDestination = AuthScreen.Onboarding.route // To test the onboarding
+        startDestination = AuthScreen.Welcome.route // To test the onboarding
     ){
         composable(route = AuthScreen.Login.route){
             LogInScreen(
@@ -46,8 +51,11 @@ fun NavGraphBuilder.authNavGraph(
                 },
                 toLogin = {
                     navController.navigate(AuthScreen.Login.route)
-                }
-            )
+                },
+                healthServiceViewModelFactory = healthServiceViewModelFactory,
+            ){ nric, role ->
+                navController.navigate("${AuthScreen.Onboarding.route}/$nric/$role")
+            }
         }
         composable(route = AuthScreen.Welcome.route){
             WelcomeScreen(
@@ -59,8 +67,17 @@ fun NavGraphBuilder.authNavGraph(
                 }
             )
         }
-        composable(route = AuthScreen.Onboarding.route){
-            OnboardingScreen()
+        composable(route = "${AuthScreen.Onboarding.route}/{nric}/{role}"){ backStackEntry ->
+            val nric: String = backStackEntry.arguments?.getString("nric") ?: ""
+            val role: String = backStackEntry.arguments?.getString("role") ?: ""
+            OnboardingScreen(
+                healthServiceViewModelFactory = healthServiceViewModelFactory,
+                toLogin = {
+                    navController.navigate(AuthScreen.Login.route)
+                },
+                nric = nric,
+                role = role
+            )
         }
     }
 }

@@ -74,6 +74,7 @@ class HealthServiceRepository(
     private val medicationDao = database.medicationDao
     private val categoryDao = database.categoryDao
     private val timeDao = database.timeDao
+    private val onboardingDao = database.onboardingDao
 
     private val baseUrl = "https://f5fqqafe6e.execute-api.us-east-1.amazonaws.com"
 
@@ -226,6 +227,62 @@ class HealthServiceRepository(
             }
         }
     }
+
+    suspend fun addUserMeasurements(
+        nric: String,
+        role: String,
+        age: Int,
+        gender: String,
+        weight: Double,
+        height: Double
+    ): Any? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("$baseUrl/user")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Health Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.doOutput = true
+
+                val jsonObject = JSONObject().apply {
+                    put("nric", nric)
+                    put("role", role)
+                    put("age", age)
+                    put("gender", gender)
+                    put("weight", weight)
+                    put("height", height)
+                }
+
+                OutputStreamWriter(connection.outputStream).use { writer ->
+                    writer.write(jsonObject.toString())
+                    writer.flush()
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.d("Deed", "Has Been Done")
+                    return@withContext "User Measurements Added"
+                } else {
+                    Log.e("HealthServiceRepository", "Failed to add: $responseCode")
+                    return@withContext Result.Error(Exception("Failed to add measurements: $responseCode"))
+                }
+            } catch (e: Exception) {
+                Log.e("HealthServiceRepository", "Error adding activity: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
 
     suspend fun addActivity(
         userId: Int,
@@ -891,6 +948,23 @@ class HealthServiceRepository(
     ): List<Activity> {
         return withContext(Dispatchers.IO) {
             return@withContext activityDao.getAllActivities(userId, date)
+        }
+    }
+
+    suspend fun getOnboardingStatus(
+        userId: Int
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
+            return@withContext onboardingDao.getOnboardingStatus(userId)
+        }
+    }
+
+    suspend fun updateOnboardingStatus(
+        userId: Int,
+        onboarding: Boolean
+    ){
+        return withContext(Dispatchers.IO) {
+            return@withContext onboardingDao.updateOnboardingStatus(userId, onboarding)
         }
     }
 

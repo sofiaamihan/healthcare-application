@@ -12,11 +12,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fullhealthcareapplication.ui.graphs.authNavGraph
 import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
+import com.example.fullhealthcareapplication.data.viewmodel.GetOnboardingStatusViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.MainContent
 import kotlinx.coroutines.flow.first
@@ -34,6 +36,7 @@ fun RootNavigationGraph(
 ){
     val coroutineScope = rememberCoroutineScope()
     var startDestination by remember { mutableStateOf(Graph.AUTHENTICATION) }
+
     LaunchedEffect(Unit) {
         coroutineScope.launch{
             val token = tokenDataStore.getToken.first()

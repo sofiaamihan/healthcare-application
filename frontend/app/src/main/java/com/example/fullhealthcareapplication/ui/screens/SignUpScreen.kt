@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fullhealthcareapplication.R
+import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.viewmodel.SignUpViewModel
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
 import com.example.fullhealthcareapplication.ui.components.Back
@@ -45,8 +46,10 @@ import com.example.fullhealthcareapplication.ui.components.validatePassword
 @Composable
 fun SignUpScreen(
     viewModelFactory: UserInfoViewModelFactory,
+    healthServiceViewModelFactory: HealthServiceViewModelFactory,
     toWelcome: () -> Unit,
-    toLogin: () -> Unit
+    toLogin: () -> Unit,
+    toOnboarding: (String, String) -> Unit
 ){
     var nric = remember { FieldInput() }
     var email = remember { FieldInput() }
@@ -175,9 +178,11 @@ fun SignUpScreen(
                             password.value.value
                         )
                         if (signUpViewModel.state.successState){
-//                        Toast.makeText(context, "Sign Up Successful!!", Toast.LENGTH_SHORT).show()
-                            // Make a toast to display account successfully created
-                            toLogin()
+
+                            toOnboarding(
+                                nric.value.value,
+                                roleState.value
+                            )
                         }
                     }
                 )

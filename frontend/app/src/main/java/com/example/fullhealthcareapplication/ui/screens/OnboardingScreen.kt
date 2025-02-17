@@ -1,5 +1,6 @@
 package com.example.fullhealthcareapplication.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
@@ -63,8 +64,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.example.fullhealthcareapplication.R
+import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
+import com.example.fullhealthcareapplication.data.viewmodel.AddUserMeasurementsViewModel
 import com.example.fullhealthcareapplication.ui.components.Back
 import com.example.fullhealthcareapplication.ui.components.CustomTextField
 import com.example.fullhealthcareapplication.ui.components.OnboardingItems
@@ -77,11 +81,19 @@ import java.time.format.TextStyle
 
 @ExperimentalPagerApi
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(
+    nric: String,
+    role: String,
+    healthServiceViewModelFactory: HealthServiceViewModelFactory,
+    toLogin: () -> Unit
+) {
     val items = OnboardingItems.getData()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState(pageCount = items.size)
     val onboardingState = remember { mutableStateOf(OnboardingState()) }
+
+    val addUserMeasurementsViewModel: AddUserMeasurementsViewModel = viewModel(factory = healthServiceViewModelFactory)
+    val state = addUserMeasurementsViewModel.state
 
     Back(
         toBack = {},
@@ -116,14 +128,27 @@ fun OnboardingScreen() {
             }
 
             Button(
+
                 onClick = {
                     if (pageState.currentPage + 1 < items.size) {
+                        Log.d("Checks", nric)
                         scope.launch {
                             pageState.scrollToPage(pageState.currentPage + 1)
                         }
                     } else {
                         // On final page, perform your action (e.g., save data to database)
 //                        saveToDatabase(onboardingState.value)
+                        addUserMeasurementsViewModel.addUserMeasurements(
+                            nric,
+                            role,
+                            onboardingState.value.age.toInt(),
+                            onboardingState.value.gender.toString(),
+                            onboardingState.value.weight.toDouble(),
+                            onboardingState.value.height.toDouble()
+                        )
+                        if (addUserMeasurementsViewModel.state.successState) {
+                            toLogin()
+                        }
                     }
                 },
                 modifier = Modifier

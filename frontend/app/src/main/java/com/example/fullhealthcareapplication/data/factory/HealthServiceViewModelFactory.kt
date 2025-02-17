@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.fullhealthcareapplication.data.repository.HealthServiceRepository
 import com.example.fullhealthcareapplication.data.viewmodel.AddActivityViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.AddMedicationViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.AddUserMeasurementsViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.DeleteActivityViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.DeleteMedicationViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.EditActivityViewModel
@@ -17,9 +18,11 @@ import com.example.fullhealthcareapplication.data.viewmodel.GetAllMedicationsVie
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllTimesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetCategoriesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetMedicationsViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.GetOnboardingStatusViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetTimesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetUserIdViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetUserMeasurementsViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.UpdateOnboardingStatusViewModel
 
 @Suppress("UNCHECKED_CAST")
 class HealthServiceViewModelFactory(
@@ -76,6 +79,15 @@ class HealthServiceViewModelFactory(
                 healthServiceRepository
             ) as T
             modelClass.isAssignableFrom(GetAllActivitiesViewModel::class.java) -> GetAllActivitiesViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(GetOnboardingStatusViewModel::class.java) -> GetOnboardingStatusViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(UpdateOnboardingStatusViewModel::class.java) -> UpdateOnboardingStatusViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(AddUserMeasurementsViewModel::class.java) -> AddUserMeasurementsViewModel(
                 healthServiceRepository
             ) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")

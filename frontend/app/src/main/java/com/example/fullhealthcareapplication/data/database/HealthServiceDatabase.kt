@@ -7,18 +7,20 @@ import androidx.room.RoomDatabase
 import com.example.fullhealthcareapplication.data.dao.ActivityDao
 import com.example.fullhealthcareapplication.data.dao.CategoryDao
 import com.example.fullhealthcareapplication.data.dao.MedicationDao
+import com.example.fullhealthcareapplication.data.dao.OnboardingDao
 import com.example.fullhealthcareapplication.data.dao.TimeDao
 import com.example.fullhealthcareapplication.data.dao.UserDao
 import com.example.fullhealthcareapplication.data.entity.Category
 import com.example.fullhealthcareapplication.data.entity.Medication
 import com.example.fullhealthcareapplication.data.entity.Activity
+import com.example.fullhealthcareapplication.data.entity.Onboarding
 import com.example.fullhealthcareapplication.data.entity.User
 import com.example.fullhealthcareapplication.data.entity.Time
 
 
 @Database(
-    entities = [User::class, Activity::class, Category::class, Medication::class, Time::class],
-    version = 2,
+    entities = [User::class, Activity::class, Category::class, Medication::class, Time::class, Onboarding::class],
+    version = 3,
     exportSchema = false
 )
 abstract class HealthServiceDatabase : RoomDatabase() {
@@ -27,6 +29,7 @@ abstract class HealthServiceDatabase : RoomDatabase() {
     abstract val medicationDao: MedicationDao
     abstract val categoryDao: CategoryDao
     abstract val timeDao: TimeDao
+    abstract val onboardingDao: OnboardingDao
 
 
     companion object {
