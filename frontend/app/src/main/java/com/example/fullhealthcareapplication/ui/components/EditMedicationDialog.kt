@@ -2,7 +2,6 @@ package com.example.fullhealthcareapplication.ui.components
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -19,13 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMedicationDialog(
+fun EditMedicationDialog(
     onDismiss: () -> Unit,
-    onAddMedication: (Int, Int, String, String, Double, String, String) -> Unit,
+    onEditMedication: (Int,Int, Int, String, String, Double, String, String) -> Unit,
+    id: Int,
     userId: Int,
     timeId: Int,
     onTimeIdChange: (Int) -> Unit,
@@ -240,11 +239,10 @@ fun AddMedicationDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onAddMedication(userId, timeId, name, type, measureAmount, measureUnit, frequency)
-                },
-                enabled = isFormValid
+                    onEditMedication(id, userId, timeId, name, type, measureAmount, measureUnit, frequency)
+                }
             ) {
-                Text("Add Medication")
+                Text("Edit")
             }
         },
         dismissButton = {

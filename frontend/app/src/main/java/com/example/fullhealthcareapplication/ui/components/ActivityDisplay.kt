@@ -33,7 +33,9 @@ fun ActivityDisplay(
     stepCount: Double,
     distance: Double,
     walkingSpeed: Double,
-    walkingSteadiness: Double
+    walkingSteadiness: Double,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ){
     Card (
         modifier = Modifier
@@ -68,14 +70,14 @@ fun ActivityDisplay(
                         modifier = Modifier.fillMaxWidth(0.7f)
                     )
                     IconButton(
-                        onClick = {},
+                        onClick = onEditClick,
                         modifier = Modifier
                             .height(20.dp)
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = "Edit")
                     }
                     IconButton(
-                        onClick = {},
+                        onClick = onDeleteClick,
                         modifier = Modifier
                             .height(20.dp)
                     ) {

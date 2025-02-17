@@ -18,7 +18,7 @@ import com.example.fullhealthcareapplication.data.entity.Time
 
 @Database(
     entities = [User::class, Activity::class, Category::class, Medication::class, Time::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class HealthServiceDatabase : RoomDatabase() {

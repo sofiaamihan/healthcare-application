@@ -1,5 +1,6 @@
 package com.example.fullhealthcareapplication.data.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.fullhealthcareapplication.data.repository.HealthServiceRepository
 import com.example.fullhealthcareapplication.data.repository.IdResponse
@@ -14,6 +15,7 @@ import com.example.fullhealthcareapplication.data.entity.Time
 import com.example.fullhealthcareapplication.data.entity.User
 import com.example.fullhealthcareapplication.data.repository.ActivityResponse
 import com.example.fullhealthcareapplication.data.repository.CategoryResponse
+import com.example.fullhealthcareapplication.data.repository.DiscoverServiceRepository
 import com.example.fullhealthcareapplication.data.repository.MedicationResponse
 import com.example.fullhealthcareapplication.data.repository.Result
 import com.example.fullhealthcareapplication.data.repository.TimeResponse
@@ -242,6 +244,58 @@ class AddMedicationViewModel(
     }
 }
 
+class EditActivityViewModel(
+    private val healthServiceRepository: HealthServiceRepository
+): ViewModel() {
+    var state by mutableStateOf(HealthResultState())
+
+    fun editActivity(
+        id: Int,
+        userId: Int,
+        activityCategoryId: Int,
+        timeTaken: String,
+        caloriesBurnt: Double,
+        stepCount: Double,
+        distance: Double,
+        walkingSpeed: Double,
+        walkingSteadiness: Double
+    ){
+        viewModelScope.launch{
+            state = state.copy(loadingState = true)
+
+            val result = healthServiceRepository.editActivity(id, userId, activityCategoryId, timeTaken, caloriesBurnt, stepCount, distance, walkingSpeed, walkingSteadiness)
+            if(result != null){
+                state = state.copy(successState = true)
+            } else {
+                state = state.copy(errorState = true, errorMessage = "Edit Activity Failed")
+            }
+            state = state.copy(loadingState = false)
+        }
+    }
+}
+
+class DeleteActivityViewModel(
+    private val healthServiceRepository: HealthServiceRepository
+): ViewModel() {
+    var state by mutableStateOf(HealthResultState())
+
+    fun deleteActivity(
+        id: Int
+    ){
+        viewModelScope.launch{
+            state = state.copy(loadingState = true)
+
+            val result = healthServiceRepository.deleteActivity(id)
+            if(result != null){
+                state = state.copy(successState = true)
+            } else {
+                state = state.copy(errorState = true, errorMessage = "Delete Activity Failed")
+            }
+            state = state.copy(loadingState = false)
+        }
+    }
+}
+
 class GetCategoriesViewModel(
     private val healthServiceRepository: HealthServiceRepository,
 ): ViewModel() {
@@ -265,6 +319,57 @@ class GetCategoriesViewModel(
                 }
             }
 
+            state = state.copy(loadingState = false)
+        }
+    }
+}
+
+class EditMedicationViewModel(
+    private val healthServiceRepository: HealthServiceRepository
+): ViewModel() {
+    var state by mutableStateOf(HealthResultState())
+
+    fun editMedication(
+        id: Int,
+        userId: Int,
+        timeId: Int,
+        name: String,
+        type: String,
+        measureAmount: Double,
+        measureUnit: String,
+        frequency: String,
+    ){
+        viewModelScope.launch{
+            state = state.copy(loadingState = true)
+
+            val result = healthServiceRepository.editMedication(id, userId, timeId, name, type, measureAmount, measureUnit, frequency)
+            if(result != null){
+                state = state.copy(successState = true)
+            } else {
+                state = state.copy(errorState = true, errorMessage = "Edit Medication Failed")
+            }
+            state = state.copy(loadingState = false)
+        }
+    }
+}
+
+class DeleteMedicationViewModel(
+    private val healthServiceRepository: HealthServiceRepository
+): ViewModel() {
+    var state by mutableStateOf(HealthResultState())
+
+    fun deleteMedication(
+        id: Int
+    ){
+        viewModelScope.launch{
+            state = state.copy(loadingState = true)
+
+            val result = healthServiceRepository.deleteMedication(id)
+            if(result != null){
+                state = state.copy(successState = true)
+            } else {
+                state = state.copy(errorState = true, errorMessage = "Delete Medication Failed")
+            }
             state = state.copy(loadingState = false)
         }
     }

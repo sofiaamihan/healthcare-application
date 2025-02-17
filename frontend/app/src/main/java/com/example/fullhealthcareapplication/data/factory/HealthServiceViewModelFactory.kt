@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.fullhealthcareapplication.data.repository.HealthServiceRepository
 import com.example.fullhealthcareapplication.data.viewmodel.AddActivityViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.AddMedicationViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.DeleteActivityViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.DeleteMedicationViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.EditActivityViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.EditMedicationViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.EditUserMeasurementsViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetActivitiesViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllActivitiesViewModel
@@ -29,7 +33,19 @@ class HealthServiceViewModelFactory(
             modelClass.isAssignableFrom(AddActivityViewModel::class.java) -> AddActivityViewModel(
                 healthServiceRepository
             ) as T
+            modelClass.isAssignableFrom(EditActivityViewModel::class.java) -> EditActivityViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(DeleteActivityViewModel::class.java) -> DeleteActivityViewModel(
+                healthServiceRepository
+            ) as T
             modelClass.isAssignableFrom(AddMedicationViewModel::class.java) -> AddMedicationViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(EditMedicationViewModel::class.java) -> EditMedicationViewModel(
+                healthServiceRepository
+            ) as T
+            modelClass.isAssignableFrom(DeleteMedicationViewModel::class.java) -> DeleteMedicationViewModel(
                 healthServiceRepository
             ) as T
             modelClass.isAssignableFrom(GetUserMeasurementsViewModel::class.java) -> GetUserMeasurementsViewModel(

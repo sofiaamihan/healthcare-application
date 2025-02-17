@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -283,8 +285,123 @@ class HealthServiceRepository(
         }
     }
 
-    // TODO - Edit Activity
-    // TODO - Delete Activity
+    suspend fun editActivity(
+        id: Int,
+        userId: Int,
+        activityCategoryId: Int,
+        timeTaken: String,
+        caloriesBurnt: Double,
+        stepCount: Double,
+        distance: Double,
+        walkingSpeed: Double,
+        walkingSteadiness: Double
+    ): Any? {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d("INSIDE EDIT ACTIVITY", "THAT MEANS ITS EDITING")
+                Log.d("ID", "$id")
+                val url = URL("$baseUrl/activity/$id")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "PUT"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Health Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.doOutput = true
+
+
+                val jsonObject = JSONObject().apply {
+                    put("user_id", userId)
+                    put("category_id", activityCategoryId)
+                    put("time_taken", timeTaken)
+                    put("calories_burnt", caloriesBurnt)
+                    put("step_count", stepCount)
+                    put("distance", distance)
+                    put("walking_speed", walkingSpeed)
+                    put("walking_steadiness", walkingSteadiness)
+                }
+                Log.d("EditActivityPayload", jsonObject.toString())
+
+                OutputStreamWriter(connection.outputStream).use { writer ->
+                    writer.write(jsonObject.toString())
+                    writer.flush()
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = StringBuilder()
+                    BufferedReader(InputStreamReader(connection.inputStream)).use { reader ->
+                        var line: String?
+                        while (reader.readLine().also { line = it } != null) {
+                            response.append(line)
+                        }
+                    }
+                    val jsonResponse = JSONObject(response.toString())
+                    val success = jsonResponse.getBoolean("success")
+                    val changedRows = jsonResponse.getInt("changedRows")
+
+                    Log.d("Success?", "Activity Edited: $success, Changed Rows: $changedRows")
+                    return@withContext if (success) "Activity Edited" else "Edit Failed"
+                } else {
+                    Log.e("HealthServiceRepository", "Failed to edit activity: $responseCode")
+                    return@withContext null
+                }
+
+            } catch (e: Exception) {
+                Log.e("HealthServiceRepository", "Error editing activity: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
+    suspend fun deleteActivity(
+        id: Int
+    ): Any? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("$baseUrl/activity/$id")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "DELETE"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Health Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    deleteCachedActivity(id)
+                    return@withContext "Activity Deleted"
+                } else {
+                    Log.e("HealthServiceRepository", "Failed to delete activity: $responseCode")
+                    return@withContext null
+                }
+
+            } catch (e: Exception) {
+                Log.e("HealthServiceRepository", "Error deleting activity: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
+    suspend fun deleteCachedActivity(
+        id: Int
+    ) {
+        return withContext(Dispatchers.IO) {
+            return@withContext activityDao.deleteActivity(id)
+        }
+    }
 
     suspend fun addMedication(
         userId: Int,
@@ -342,8 +459,119 @@ class HealthServiceRepository(
         }
     }
 
-    // TODO - Edit Medication
-    // TODO - Delete Medication
+    suspend fun editMedication(
+        id: Int,
+        userId: Int,
+        timeId: Int,
+        name: String,
+        type: String,
+        measureAmount: Double,
+        measureUnit: String,
+        frequency: String,
+    ): Any? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("$baseUrl/medication/$id")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "PUT"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Health Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.doOutput = true
+
+
+                val jsonObject = JSONObject().apply {
+                    put("user_id", userId)
+                    put("time_id", timeId)
+                    put("name", name)
+                    put("type", type)
+                    put("measure_amount", measureAmount)
+                    put("measure_unit", measureUnit)
+                    put("frequency", frequency)
+                }
+                Log.d("EditMedicationPayload", jsonObject.toString())
+
+                OutputStreamWriter(connection.outputStream).use { writer ->
+                    writer.write(jsonObject.toString())
+                    writer.flush()
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val response = StringBuilder()
+                    BufferedReader(InputStreamReader(connection.inputStream)).use { reader ->
+                        var line: String?
+                        while (reader.readLine().also { line = it } != null) {
+                            response.append(line)
+                        }
+                    }
+                    val jsonResponse = JSONObject(response.toString())
+                    val success = jsonResponse.getBoolean("success")
+                    val changedRows = jsonResponse.getInt("changedRows")
+
+                    Log.d("Success?", "Medication Edited: $success, Changed Rows: $changedRows")
+                    return@withContext if (success) "Medication Edited" else "Edit Failed"
+                } else {
+                    Log.e("HealthServiceRepository", "Failed to edit medication: $responseCode")
+                    return@withContext null
+                }
+
+            } catch (e: Exception) {
+                Log.e("HealthServiceRepository", "Error editing medication: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
+    suspend fun deleteMedication(
+        id: Int
+    ): Any? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val url = URL("$baseUrl/medication/$id")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "DELETE"
+
+                val token = tokenDataStore.getToken.first()
+                if (token != null) {
+                    connection.setRequestProperty("Authorization", token)
+                    Log.d("Token Here", token)
+                } else {
+                    Log.e("Health Service Repository", "Token is null")
+                    return@withContext Result.Error(Exception("Token is null"))
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    deleteCachedMedication(id)
+                    return@withContext "Activity Deleted"
+                } else {
+                    Log.e("HealthServiceRepository", "Failed to delete medication: $responseCode")
+                    return@withContext null
+                }
+
+            } catch (e: Exception) {
+                Log.e("HealthServiceRepository", "Error deleting medication: ${e.localizedMessage}", e)
+                return@withContext Result.Error(e)
+            }
+        }
+    }
+
+    suspend fun deleteCachedMedication(
+        id: Int
+    ) {
+        return withContext(Dispatchers.IO) {
+            return@withContext medicationDao.deleteMedication(id)
+        }
+    }
 
     suspend fun getCategories(): Result<List<CategoryResponse>> {
         return withContext(Dispatchers.IO) {
@@ -378,7 +606,6 @@ class HealthServiceRepository(
                             name = categories.name
                         )
                         contentList.add(categories)
-                        Log.d("Got Categories !!", "$categories")
                         categoryDao.insertCategory(category)
                     }
                     val cachedCategories = categoryDao.getAllCategories()
@@ -391,7 +618,7 @@ class HealthServiceRepository(
                         categoryList.add(category)
                     }
 
-                    Log.d("HealthServiceRepo", "Successfully cached: $categoryList")
+                    Log.d("HealthServiceRepo", "Successfully cached categories: $categoryList")
                     return@withContext Result.Success(categoryList)
                 } else {
                     return@withContext Result.Error(Exception("Category not found in cache"))
@@ -447,7 +674,6 @@ class HealthServiceRepository(
                             time = times.time
                         )
                         contentList.add(times)
-                        Log.d("Got Times !!", "$times")
                         timeDao.insertTime(time)
                     }
                     val cachedTimes = timeDao.getAllTimes()
@@ -460,7 +686,7 @@ class HealthServiceRepository(
                         timeList.add(time)
                     }
 
-                    Log.d("HealthServiceRepo", "Successfully cached: $timeList")
+                    Log.d("HealthServiceRepo", "Successfully cached times: $timeList")
                     return@withContext Result.Success(timeList)
                 } else {
                     return@withContext Result.Error(Exception("Time not found in cache"))
@@ -530,7 +756,6 @@ class HealthServiceRepository(
                             frequency = medications.frequency
                         )
                         contentList.add(medications)
-                        Log.d("Got Medication !!", "$medications")
                         medicationDao.addMedication(medication)
                     }
                     val cachedMedications = medicationDao.getAllMedications(userId)
@@ -549,7 +774,7 @@ class HealthServiceRepository(
                         medicationList.add(medication)
                     }
 
-                    Log.d("HealthServiceRepo", "Successfully cached: $medicationList")
+                    Log.d("HealthServiceRepo", "Successfully cached medication: $medicationList")
                     return@withContext Result.Success(medicationList)
                 } else {
                     return@withContext Result.Error(Exception("Medication not found in cache"))
@@ -624,7 +849,6 @@ class HealthServiceRepository(
                             walkingSteadiness = activities.walkingSteadiness
                         )
                         contentList.add(activities)
-                        Log.d("Got Activities !!", "$activities")
                         activityDao.addActivity(activity)
                     }
                     val cachedActivities = activityDao.getAllActivities(userId, date)
@@ -644,7 +868,7 @@ class HealthServiceRepository(
                         activityList.add(activity)
                     }
 
-                    Log.d("HealthServiceRepo", "Successfully cached: $activityList")
+                    Log.d("HealthServiceRepo", "Successfully cached activities: $activityList")
                     return@withContext Result.Success(activityList)
                 } else {
                     return@withContext Result.Error(Exception("Activities not found in cache"))

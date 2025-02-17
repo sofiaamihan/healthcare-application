@@ -3,10 +3,15 @@ package com.example.fullhealthcareapplication.ui.graphs
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.example.fullhealthcareapplication.ui.graphs.authNavGraph
 import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
@@ -14,6 +19,7 @@ import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModel
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
 import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.MainContent
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -27,10 +33,17 @@ fun RootNavigationGraph(
     sensorViewModel: SensorViewModel
 ){
     val coroutineScope = rememberCoroutineScope()
+    var startDestination by remember { mutableStateOf(Graph.AUTHENTICATION) }
+    LaunchedEffect(Unit) {
+        coroutineScope.launch{
+            val token = tokenDataStore.getToken.first()
+            startDestination = if (!token.isNullOrEmpty()) Graph.HOME else Graph.AUTHENTICATION
+        }
+    }
     NavHost(
         navController = navController,
         route = Graph.ROOT,
-        startDestination = Graph.HOME // Change this whenever you want to test screens
+        startDestination = startDestination // Change this whenever you want to test screens
     ){
         authNavGraph(
             navController = navController,

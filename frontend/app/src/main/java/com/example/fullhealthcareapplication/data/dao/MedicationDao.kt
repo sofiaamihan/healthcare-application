@@ -8,7 +8,7 @@ import com.example.fullhealthcareapplication.data.entity.Medication
 @Dao
 interface MedicationDao {
 
-    @Query("SELECT * FROM medication WHERE id = :userId")
+    @Query("SELECT * FROM medication WHERE user_id = :userId")
     fun getAllMedications(userId: Int): List<Medication>
 
     @Upsert
