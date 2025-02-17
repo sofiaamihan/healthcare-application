@@ -166,7 +166,7 @@ fun SignUpScreen(
                             return@GreenButton
                         }
 
-                        // Needs checking like if there is already an account associated to the email
+                        // TODO - Needs checking like if there is already an account associated to the email
                         signUpViewModel.signUpUser(
                             nric.value.value,
                             roleState.value,

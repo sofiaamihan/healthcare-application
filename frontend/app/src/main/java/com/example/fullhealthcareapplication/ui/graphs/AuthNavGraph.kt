@@ -22,7 +22,7 @@ fun NavGraphBuilder.authNavGraph(
 ){
     navigation(
         route = Graph.AUTHENTICATION,
-        startDestination = AuthScreen.Welcome.route // To test the onboarding
+        startDestination = AuthScreen.Onboarding.route // To test the onboarding
     ){
         composable(route = AuthScreen.Login.route){
             LogInScreen(
