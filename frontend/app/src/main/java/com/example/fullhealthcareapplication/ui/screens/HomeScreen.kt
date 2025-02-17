@@ -178,7 +178,7 @@ fun HomeScreen(
         Text(
             text = "Today, $current",
             modifier = Modifier
-                .padding(top = 280.dp, start = 32.dp)
+                .padding(top = 270.dp, start = 32.dp)
         )
         Column (
             modifier = Modifier
