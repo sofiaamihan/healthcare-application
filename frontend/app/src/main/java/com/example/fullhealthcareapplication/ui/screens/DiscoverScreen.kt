@@ -1,17 +1,24 @@
 package com.example.fullhealthcareapplication.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fullhealthcareapplication.ui.components.DiscoverButton
 import com.example.fullhealthcareapplication.ui.components.NavigationDrawer
@@ -46,6 +55,7 @@ fun DiscoverScreen(
 ){
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
     val state = getAllContentViewModel.state
+    val categoryIds = listOf(0, 1, 2, 3, 4, 5, 6)
 
     var showModal = remember { mutableStateOf(false) }
     val contentCategoryId = remember { mutableIntStateOf(0) }
@@ -135,14 +145,77 @@ fun DiscoverScreen(
                     Text("Error: ${state.errorMessage}")
                 }
             } else {
+                val isDropDownExpanded = remember { mutableStateOf(false) }
+                val roles = listOf("All", "Diet", "Exercise", "Medicine", "Mental Health", "Environment", "Disease")
+                val itemPosition = remember { mutableIntStateOf(0) }
+
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                ){
+                    Box{
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clickable {
+                                    isDropDownExpanded.value = true
+                                }
+                                .padding(start = 48.dp, end = 48.dp)
+                        ) {
+
+                            Text(
+                                text = roles[itemPosition.intValue],
+                                fontSize = 14.sp,
+                                textAlign = TextAlign.Left,
+                                lineHeight = 16.sp,
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                            )
+                            Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "Arrow down")
+                        }
+                        DropdownMenu(
+                            expanded = isDropDownExpanded.value,
+                            onDismissRequest = {
+                                isDropDownExpanded.value = false
+                            },
+                        ) {
+                            roles.forEachIndexed { index, role ->
+                                DropdownMenuItem(
+                                    text = { Text(
+                                        role,
+                                        fontSize = 14.sp,
+                                        textAlign = TextAlign.Left,
+                                        lineHeight = 16.sp,
+                                        modifier = Modifier
+                                            .padding(top = 10.dp, start = 10.dp)
+                                    ) },
+                                    onClick = {
+                                        isDropDownExpanded.value = false
+                                        itemPosition.intValue = index
+                                        contentCategoryId.intValue = categoryIds[index]
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+                val filteredContentList = if (contentCategoryId.intValue == 0) {
+                    state.contentList
+                } else {
+                    state.contentList.filter { it.contentCategoryId == contentCategoryId.intValue }
+                }
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 125.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    items(state.contentList.size) { index ->
-                        val bannerResId = when (state.contentList[index].contentCategoryId) {
+                    items(filteredContentList.size) { index ->
+                        val content = filteredContentList[index]
+                        val bannerResId = when (content.contentCategoryId) {
                             1 -> R.drawable.diet1
                             2 -> R.drawable.exercise2
                             3 -> R.drawable.medicine3
