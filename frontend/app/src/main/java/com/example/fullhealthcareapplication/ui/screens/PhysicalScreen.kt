@@ -4,7 +4,6 @@ import android.graphics.PointF
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.SnapPosition.Center
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,10 +36,12 @@ import com.example.fullhealthcareapplication.ui.components.AppBar
 import android.graphics.Paint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.geometry.Offset
@@ -55,6 +56,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllActivitiesViewModel
+import com.example.fullhealthcareapplication.data.viewmodel.GetAllCategoriesViewModel
+import com.example.fullhealthcareapplication.ui.components.ActivityDisplay
 import com.example.fullhealthcareapplication.ui.components.StepCounterBarGraph
 import kotlinx.coroutines.flow.first
 import java.time.LocalDateTime
@@ -71,19 +74,18 @@ fun PhysicalScreen(
 ){
     val dateKeyFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val dateKey = LocalDateTime.now().format(dateKeyFormatter)
-    val caloriesBurnt = remember { mutableDoubleStateOf(0.0) }
-    val stepCount = remember { mutableDoubleStateOf(0.0) }
-    val distance = remember { mutableDoubleStateOf(0.0) }
     val getAllActivitiesViewModel: GetAllActivitiesViewModel = viewModel(factory = healthServiceViewModelFactory)
+    val getAllCategoriesViewModel : GetAllCategoriesViewModel = viewModel(factory = healthServiceViewModelFactory)
     val state = getAllActivitiesViewModel.state
+    val categoryState = getAllCategoriesViewModel.state
 
     LaunchedEffect(Unit) {
         getAllActivitiesViewModel.getAllActivities(
             tokenDataStore.getId.first()?.toInt() ?: 0,
-            dateKey.toString())
+            dateKey.toString()
+        )
+        getAllCategoriesViewModel.getAllCategories()
     }
-
-
 
     val horizontalGradientBrush = Brush.horizontalGradient(
         colors = listOf(
@@ -143,22 +145,11 @@ fun PhysicalScreen(
             }
         }
         val daysOfWeek = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-        val stepCounts = listOf(3000, 5000, 7000, 4000, 6000, 8000, 2000) // Fake data
-
-//        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-//            Text(
-//                text = "Weekly Step Count",
-//                textAlign = TextAlign.Start,
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//            StepCounterBarGraph(stepCounts = stepCounts, days = daysOfWeek)
-//        }
+        val stepCounts = listOf(3000, 5000, 7000, 4000, 6000, 8000, 2000)
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 24.dp, end = 24.dp),
+                .padding(top = 24.dp, start = 40.dp, end = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -188,58 +179,33 @@ fun PhysicalScreen(
                 text = "Today",
                 textAlign = TextAlign.Start,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
-        Row (
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 5.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text(
-                "Calories Burnt",
-                fontSize = 12.sp,
-                lineHeight = 14.sp)
-            Text(
-                "${state.cachedActivityList.firstOrNull()?.caloriesBurnt ?: 0.0}",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-        }
-        Row (
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 5.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text(
-                "Step Count",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-            Text(
-                "4000",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-        }
-        Row (
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 5.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text(
-                "Distance",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-            Text(
-                "700",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
+
+        state.cachedActivityList.forEachIndexed { index, item ->
+            Row (
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ){
+                val cat = remember {  mutableStateOf("") }
+                categoryState.cachedCategoryList.forEachIndexed { i, iItem ->
+                    if (state.cachedActivityList[index].categoryId == categoryState.cachedCategoryList[i].id){
+                        cat.value = categoryState.cachedCategoryList[i].name
+                    }
+                }
+                ActivityDisplay(
+                    cat.value,
+                    state.cachedActivityList[index].caloriesBurnt,
+                    state.cachedActivityList[index].stepCount,
+                    state.cachedActivityList[index].distance,
+                    state.cachedActivityList[index].walkingSpeed,
+                    state.cachedActivityList[index].walkingSteadiness
+                )
+            }
         }
     }
 }

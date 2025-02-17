@@ -263,6 +263,7 @@ fun DiscoverScreen(
                 onAddContent = { categoryId, title, summary, description, picture ->
                     addContentViewModel.addContent(categoryId, title, summary, description, picture)
                     showModal.value = false
+                    toDiscoverScreen()
                 },
                 contentCategoryId = contentCategoryId.intValue,
                 onContentCategoryIdChange = { contentCategoryId.intValue = it },
