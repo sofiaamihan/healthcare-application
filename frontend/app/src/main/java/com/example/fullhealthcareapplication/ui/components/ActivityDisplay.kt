@@ -10,7 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +37,7 @@ fun ActivityDisplay(
 ){
     Card (
         modifier = Modifier
-            .height(160.dp)
+            .padding(top = 16.dp, bottom = 16.dp)
             .fillMaxWidth(0.8f),
         shape = RoundedCornerShape(28.dp)
     ){
@@ -40,8 +45,6 @@ fun ActivityDisplay(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
-                .height(200.dp)
-                .fillMaxWidth(0.8f)
         ){
             Column (
                 modifier = Modifier
@@ -61,93 +64,118 @@ fun ActivityDisplay(
                         text = category,
                         textAlign = TextAlign.Start,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.fillMaxWidth(0.7f)
                     )
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier
+                            .height(20.dp)
+                    ) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit")
+                    }
+                    IconButton(
+                        onClick = {},
+                        modifier = Modifier
+                            .height(20.dp)
+                    ) {
+                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                    }
                 }
-                Row (
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        "Calories Burnt",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
-                    Text(
-                        "$caloriesBurnt",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
+                if(caloriesBurnt != 0.0){
+                    Row (
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            "Calories Burnt",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                        Text(
+                            "$caloriesBurnt",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
-                Row (
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        "Step Count",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
-                    Text(
-                        "$stepCount",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
+                if(stepCount != 0.0){
+                    Row (
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            "Step Count",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                        Text(
+                            "$stepCount",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
-                Row (
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        "Distance",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
-                    Text(
-                        "$distance",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
+                if(distance != 0.0){
+                    Row (
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            "Distance",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                        Text(
+                            "$distance",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
-                Row (
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        "Walking Speed",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
-                    Text(
-                        "$walkingSpeed",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
+                if(walkingSpeed != 0.0){
+                    Row (
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            "Walking Speed",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                        Text(
+                            "$walkingSpeed",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
-                Row (
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        "Walking Steadiness",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
-                    Text(
-                        "$walkingSteadiness",
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
-                    )
+                if(walkingSteadiness != 0.0){
+                    Row (
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Text(
+                            "Walking Steadiness",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                        Text(
+                            "$walkingSteadiness",
+                            fontSize = 12.sp,
+                            lineHeight = 14.sp
+                        )
+                    }
                 }
             }
         }

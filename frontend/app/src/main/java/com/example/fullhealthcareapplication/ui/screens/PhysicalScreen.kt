@@ -187,7 +187,7 @@ fun PhysicalScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 24.dp, top = 8.dp),
+            .padding(bottom = 16.dp, top = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(state.cachedActivityList.size) { index ->
