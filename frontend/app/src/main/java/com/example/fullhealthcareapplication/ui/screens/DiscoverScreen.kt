@@ -198,7 +198,7 @@ fun DiscoverScreen(
                 description = description.value,
                 onDescriptionChange = { description.value = it },
                 picture = picture.value,
-                onPictureChange = { picture.value = it }
+//                onPictureChange = { picture.value = it }
             )
         }
     }
