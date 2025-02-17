@@ -32,9 +32,9 @@ fun ActivityDisplay(
 ){
     Card (
         modifier = Modifier
-            .height(200.dp)
+            .height(160.dp)
             .fillMaxWidth(0.8f),
-        shape = RoundedCornerShape(32.dp)
+        shape = RoundedCornerShape(28.dp)
     ){
         Box(
             modifier = Modifier

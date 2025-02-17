@@ -33,7 +33,7 @@ fun StepCounterBarGraph(stepCounts: List<Int>, days: List<String>) {
                 modifier = Modifier.width(barWidth)
             ) {
                 Canvas(modifier = Modifier
-                    .fillMaxHeight(0.4f)
+                    .fillMaxHeight(0.3f)
                     .width(barWidth)) {
                     val barHeight = (stepCounts[index] / maxSteps.toFloat()) * size.height
                     drawRect(
