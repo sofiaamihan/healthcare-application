@@ -53,43 +53,45 @@ fun OnboardingScreen(){
     Back( // TODO - remove the back arrow and skip button because we need this data
         toBack = {},
         color = Color.White
-    )
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TopSection(
-            onSkipClick = {
-                if (pageState.currentPage + 1 < items.size) scope.launch {
-                    pageState.scrollToPage(items.size - 1)
-                }
-            }        )
-        HorizontalPager(
-            state = pageState,
-            modifier = Modifier
-                .fillMaxHeight(0.6f)
-                .fillMaxWidth()
-        ) { page ->
-            OnboardingItem(items = items[page])
-        }
-        Box(
-        ){
-            Indicators(size = items.size, index = pageState.currentPage)
-        }
-        Button(
-            onClick = {
-                if (pageState.currentPage + 1 < items.size) scope.launch {
-                    pageState.scrollToPage(pageState.currentPage + 1)
-                }
-            },
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .fillMaxWidth(0.3f)
+    ){ padding ->
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Next")
+            TopSection(
+                onSkipClick = {
+                    if (pageState.currentPage + 1 < items.size) scope.launch {
+                        pageState.scrollToPage(items.size - 1)
+                    }
+                }        )
+            HorizontalPager(
+                state = pageState,
+                modifier = Modifier
+                    .fillMaxHeight(0.6f)
+                    .fillMaxWidth()
+            ) { page ->
+                OnboardingItem(items = items[page])
+            }
+            Box(
+            ){
+                Indicators(size = items.size, index = pageState.currentPage)
+            }
+            Button(
+                onClick = {
+                    if (pageState.currentPage + 1 < items.size) scope.launch {
+                        pageState.scrollToPage(pageState.currentPage + 1)
+                    }
+                },
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .fillMaxWidth(0.3f)
+            ) {
+                Text(text = "Next")
+            }
         }
     }
+
 }
 
 @ExperimentalPagerApi

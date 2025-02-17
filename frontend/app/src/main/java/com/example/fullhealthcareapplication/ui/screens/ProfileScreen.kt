@@ -116,8 +116,6 @@ fun ProfileScreen(
     NavigationDrawer(
         title = "Profile",
         toProfile = {toProfile()},
-        toHealthLogs = {toHealthLogs()},
-        toHealthReport = {toHealthReport()},
         toHome = {toHome()}
     ){ padding ->
         Box(

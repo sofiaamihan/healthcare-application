@@ -143,8 +143,6 @@ fun HomeScreen(
     NavigationDrawer(
         title = "Welcome Home",
         toProfile = {toProfile()},
-        toHealthLogs = {toHealthLogs()},
-        toHealthReport = {toHealthReport()},
         toHome = {toHome()}
     ){ padding ->
         Box(

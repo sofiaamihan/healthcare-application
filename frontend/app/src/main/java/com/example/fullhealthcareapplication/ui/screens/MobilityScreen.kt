@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -21,11 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
 import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.AppBar
 import com.example.fullhealthcareapplication.ui.components.Graph
@@ -38,6 +38,7 @@ fun MobilityScreen(
     sensorViewModel: SensorViewModel
 ){
     val accValues by sensorViewModel.accelerometerData.collectAsState()
+    val gyroValues by sensorViewModel.gyroscopeData.collectAsState()
 
 
     val horizontalGradientBrush = Brush.horizontalGradient(
@@ -86,7 +87,7 @@ fun MobilityScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
                     Text(
-                        text = "About Mobility",
+                        text = "Monitor Your Mobility",
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
@@ -97,104 +98,146 @@ fun MobilityScreen(
                 }
             }
         }
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = "Today",
-                textAlign = TextAlign.Start,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row (
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 5.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text(
-                "Walking Speed",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-            Text(
-                "200",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-        }
-        Row (
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 5.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Text(
-                "Walking Steadiness",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-            Text(
-                "4000",
-                fontSize = 12.sp,
-                lineHeight = 14.sp
-            )
-        }
-        // ---------- TEMP GRAPH ----------
-        val yStep = 50
-        val random = Random
-        val points = (0..9).map {
-            var num = random.nextInt(350)
-            if (num <= 50)
-                num += 100
-            num.toFloat()
-        }
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.DarkGray)
-        ) {
-            Graph(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp),
-                xValues = (0..9).map { it + 1 },
-                yValues = (0..6).map { (it + 1) * yStep },
-                points = points,
-                paddingSpace = 16.dp,
-                verticalStep = yStep,
-                graphAppearance = GraphAppearance(
-                    Color.White,
-                    MaterialTheme.colorScheme.primary,
-                    1f,
-                    true,
-                    MaterialTheme.colorScheme.primary,
-                    false,
-                    MaterialTheme.colorScheme.secondary,
-                    MaterialTheme.colorScheme.background
+        LazyColumn {
+            item{
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Text(
+                        text = "Accelerometer",
+                        textAlign = TextAlign.Start,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.fillMaxWidth(0.7f)
+                    )
+                }
+            }
+            item{
+                Graph(
+                    modifier = Modifier.fillMaxSize(),
+                    xValues = (0..2).map { it + 1 },
+                    yValues = (-10..10).map { it },
+                    points = accValues,
+                    paddingSpace = 16.dp,
+                    verticalStep = 1,
+                    graphAppearance = GraphAppearance(
+                        graphColor = MaterialTheme.colorScheme.secondary,
+                        graphAxisColor = Color.Black,
+                        graphThickness = 4f,
+                        iscolorAreaUnderChart = true,
+                        colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                        isCircleVisible = true,
+                        circleColor = MaterialTheme.colorScheme.primary,
+                        backgroundColor = MaterialTheme.colorScheme.background)
                 )
-            )
-//                                Graph(
-//                        modifier = Modifier.fillMaxSize(),
-//                        xValues = listOf(0, 1, 2), // X, Y, Z labels
-//                        yValues = (0..10).toList(), // Dummy Y axis labels
-//                        points = accValues, // Dynamic values from accelerometer
-//                        paddingSpace = 16.dp,
-//                        verticalStep = 1,
-//                        graphAppearance = GraphAppearance(
-//                            graphColor = MaterialTheme.colorScheme.secondary,
-//                            graphAxisColor = Color.Black,
-//                            graphThickness = 4f,
-//                            iscolorAreaUnderChart = true,
-//                            colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
-//                            isCircleVisible = true,
-//                            circleColor = MaterialTheme.colorScheme.primary,
-//                            backgroundColor = MaterialTheme.colorScheme.background
-//                        ))
+            }
+            item{
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 32.dp, top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Text(
+                        text = "Gyroscope",
+                        textAlign = TextAlign.Start,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.fillMaxWidth(0.7f)
+                    )
+                }
+            }
+            item{
+                Graph(
+                    modifier = Modifier
+                        .padding(bottom = 64.dp)
+                        .fillMaxSize(),
+                    xValues = (0..2).map { it + 1 },
+                    yValues = (-10..10).map { it },
+                    points = gyroValues,
+                    paddingSpace = 16.dp,
+                    verticalStep = 1,
+                    graphAppearance = GraphAppearance(
+                        graphColor = MaterialTheme.colorScheme.secondary,
+                        graphAxisColor = Color.Black,
+                        graphThickness = 4f,
+                        iscolorAreaUnderChart = true,
+                        colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                        isCircleVisible = true,
+                        circleColor = MaterialTheme.colorScheme.primary,
+                        backgroundColor = MaterialTheme.colorScheme.background)
+                )
+            }
         }
-        // ---------- TEMP GRAPH ----------
+//        Row (
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 10.dp, bottom = 10.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ){
+//            Text(
+//                text = "Accelerometer",
+//                textAlign = TextAlign.Start,
+//                fontSize = 16.sp,
+//                fontWeight = FontWeight.SemiBold,
+//                modifier = Modifier.fillMaxWidth(0.7f)
+//            )
+//        }
+//        Graph(
+//            modifier = Modifier.fillMaxSize(),
+//            xValues = (0..2).map { it + 1 },
+//            yValues = (-10..10).map { it },
+//            points = accValues,
+//            paddingSpace = 16.dp,
+//            verticalStep = 1,
+//            graphAppearance = GraphAppearance(
+//                graphColor = MaterialTheme.colorScheme.secondary,
+//                graphAxisColor = Color.Black,
+//                graphThickness = 4f,
+//                iscolorAreaUnderChart = true,
+//                colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+//                isCircleVisible = true,
+//                circleColor = MaterialTheme.colorScheme.primary,
+//                backgroundColor = MaterialTheme.colorScheme.background)
+//        )
+//        Row (
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 10.dp, bottom = 10.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically
+//        ){
+//            Text(
+//                text = "Gyroscope",
+//                textAlign = TextAlign.Start,
+//                fontSize = 16.sp,
+//                fontWeight = FontWeight.SemiBold,
+//                modifier = Modifier.fillMaxWidth(0.7f)
+//            )
+//        }
+//        Graph(
+//            modifier = Modifier.fillMaxSize(),
+//            xValues = (0..2).map { it + 1 },
+//            yValues = (-10..10).map { it },
+//            points = gyroValues,
+//            paddingSpace = 16.dp,
+//            verticalStep = 1,
+//            graphAppearance = GraphAppearance(
+//                graphColor = MaterialTheme.colorScheme.secondary,
+//                graphAxisColor = Color.Black,
+//                graphThickness = 4f,
+//                iscolorAreaUnderChart = true,
+//                colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+//                isCircleVisible = true,
+//                circleColor = MaterialTheme.colorScheme.primary,
+//                backgroundColor = MaterialTheme.colorScheme.background)
+//        )
+//
     }
 }

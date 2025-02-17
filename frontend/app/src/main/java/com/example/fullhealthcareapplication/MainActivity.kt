@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,23 +44,24 @@ import com.example.fullhealthcareapplication.ui.graphs.RootNavigationGraph
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
-class MainActivity : ComponentActivity(), SensorEventListener {
+class MainActivity : ComponentActivity(){
+//    , SensorEventListener {
 
-    private lateinit var sensorManager: SensorManager
-    private var accelerometer: Sensor? = null
-    private var gyroscope: Sensor? = null
-
-    val xValue = mutableStateOf("")
-    val yValue = mutableStateOf("")
-    val zValue = mutableStateOf("")
-
-    val xVal = mutableStateOf("")
-    val yVal = mutableStateOf("")
-    val zVal = mutableStateOf("")
-
-    val accelerometerValues = mutableStateOf(listOf(0f, 0f, 0f))
+//
+//    private lateinit var sensorManager: SensorManager
+//    private var accelerometer: Sensor? = null
+//    private var gyroscope: Sensor? = null
+//
+//    val xValue = mutableStateOf("")
+//    val yValue = mutableStateOf("")
+//    val zValue = mutableStateOf("")
+//
+//    val xVal = mutableStateOf("")
+//    val yVal = mutableStateOf("")
+//    val zVal = mutableStateOf("")
+//
+//    val accelerometerValues = mutableStateOf(listOf(0f, 0f, 0f))
     private lateinit var sensorViewModel: SensorViewModel
-
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -68,6 +71,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
         // TODO - initialise the token data store one time and reference it
         sensorViewModel = ViewModelProvider(this)[SensorViewModel::class.java]
+        sensorViewModel.startListening()
 
 
         val userInfoRepository = UserInfoRepository(TokenDataStore(this))
@@ -81,7 +85,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
         enableEdgeToEdge()
         setContent {
-            val accValues by remember { accelerometerValues }
+//            val accValues by remember { accelerometerValues }
             FullHealthcareApplicationTheme() {
 //                ----- Testing Sensors -----
 //                val viewModel = viewModel<MainViewModel>()
@@ -119,17 +123,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 //                            backgroundColor = MaterialTheme.colorScheme.background
 //                        ))
 //                }
-
-
-//                ----- Camera Testing -----
-//                Column (
-//                    modifier = Modifier.fillMaxSize(),
-//                    verticalArrangement = Arrangement.Center,
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ){
-//                    MainScreen()
-//                }
-
 //                ----- Main Screen -----
                 RootNavigationGraph(
                     navController = rememberNavController(),
@@ -139,60 +132,47 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                     tokenDataStore = TokenDataStore(this),
                     sensorViewModel = sensorViewModel
                 )
+//                MovementScreen(sensorViewModel)
 //            }
             }
-
-            sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-            gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         }
     }
 
-        override fun onResume() {
-            super.onResume()
-            accelerometer?.also { acc ->
-                sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_FASTEST)
-            }
-            gyroscope?.also { acc ->
-                sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_FASTEST)
-            }
-        }
+}
 
-        override fun onPause() {
-            super.onPause()
-            sensorManager.unregisterListener(this)
-        }
+@Composable
+fun MovementScreen(sensorViewModel: SensorViewModel = viewModel()) {
+    val accValues by sensorViewModel.accelerometerData.collectAsState()
 
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Accelerometer Readings")
+        Text("X: ${accValues[0]}")
+        Text("Y: ${accValues[1]}")
+        Text("Z: ${accValues[2]}")
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        when (event?.sensor?.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                val x = event.values[0]
-                val y = event.values[1]
-                val z = event.values[2]
-                xValue.value = "X: $x"
-                yValue.value = "Y: $y"
-                zValue.value = "Z: $z"
-                accelerometerValues.value =
-                    listOf(event.values[0], event.values[1], event.values[2])
-                sensorViewModel.updateAccelerometerData(x, y, z)
-            }
-
-            Sensor.TYPE_GYROSCOPE -> {
-                val x = event.values[0]
-                val y = event.values[1]
-                val z = event.values[2]
-                xVal.value = "X: $x"
-                yVal.value = "Y: $y"
-                zVal.value = "Z: $z"
-            }
-        }
+        Graph(
+            modifier = Modifier.fillMaxSize(),
+            xValues = listOf(0, 1, 2),
+            yValues = (0..10).toList(),
+            points = accValues,
+            paddingSpace = 16.dp,
+            verticalStep = 1,
+            graphAppearance = GraphAppearance(
+                graphColor = MaterialTheme.colorScheme.secondary,
+                graphAxisColor = Color.Black,
+                graphThickness = 4f,
+                iscolorAreaUnderChart = true,
+                colorAreaUnderChart = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                isCircleVisible = true,
+                circleColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.background
+            )
+        )
     }
-
-    override fun onAccuracyChanged(sensor: Sensor?, p1: Int) {
-
-    }
-
 }
 
 

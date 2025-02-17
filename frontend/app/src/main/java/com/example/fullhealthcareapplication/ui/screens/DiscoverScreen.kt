@@ -78,8 +78,6 @@ fun DiscoverScreen(
     NavigationDrawer(
         title = "Discover",
         toProfile = {toProfile()},
-        toHealthLogs = {toHealthLogs()},
-        toHealthReport = {toHealthReport()},
         toHome = {toHome()}
     ){ padding ->
         if (role.value == "Admin"){

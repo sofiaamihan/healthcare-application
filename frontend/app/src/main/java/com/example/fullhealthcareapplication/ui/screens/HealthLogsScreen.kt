@@ -18,27 +18,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.fullhealthcareapplication.ui.components.NavigationDrawer
 
-@Composable
-fun HealthLogsScreen(
-    toProfile: () -> Unit,
-    toHealthLogs: () -> Unit,
-    toHealthReport: () -> Unit,
-    toHome: () -> Unit,
-){
-    NavigationDrawer(
-        title = "Health Logs",
-        toProfile = {toProfile()},
-        toHealthLogs = {toHealthLogs()},
-        toHealthReport = {toHealthReport()},
-        toHome = {toHome()}
-    ){ padding ->
-        Box(
-            modifier = Modifier
-                .padding(top = 200.dp)
-                .clip(RoundedCornerShape(bottomStart = 38.dp, bottomEnd = 38.dp))
-                .height(20.dp)
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
-        )
-    }
-}
+//@Composable
+//fun HealthLogsScreen(
+//    toProfile: () -> Unit,
+//    toHealthLogs: () -> Unit,
+//    toHealthReport: () -> Unit,
+//    toHome: () -> Unit,
+//){
+//    NavigationDrawer(
+//        title = "Health Logs",
+//        toProfile = {toProfile()},
+//        toHealthLogs = {toHealthLogs()},
+//        toHealthReport = {toHealthReport()},
+//        toHome = {toHome()}
+//    ){ padding ->
+//        Box(
+//            modifier = Modifier
+//                .padding(top = 200.dp)
+//                .clip(RoundedCornerShape(bottomStart = 38.dp, bottomEnd = 38.dp))
+//                .height(20.dp)
+//                .fillMaxWidth()
+//                .background(color = MaterialTheme.colorScheme.primaryContainer)
+//        )
+//    }
+//}

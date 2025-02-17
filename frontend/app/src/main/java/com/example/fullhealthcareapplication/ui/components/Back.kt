@@ -3,6 +3,7 @@ package com.example.fullhealthcareapplication.ui.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -26,7 +27,8 @@ import androidx.compose.ui.graphics.Color // needed
 fun Back(
     modifier: Modifier = Modifier,
     toBack: () -> Unit,
-    color: Color
+    color: Color,
+    content: @Composable (PaddingValues) -> Unit
 ){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold (
@@ -47,12 +49,13 @@ fun Back(
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
                 ),
             )
         }
-    ){
-        var padding = it
+    ){paddingValues ->
         Background()
+        content(paddingValues)
     }
 }

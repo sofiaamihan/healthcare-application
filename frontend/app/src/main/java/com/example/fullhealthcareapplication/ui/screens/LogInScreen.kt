@@ -49,50 +49,44 @@ fun LogInScreen(
     Back(
         toBack = {toWelcome()},
         color = Color.White
-    )
-    Column (
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Image(
-            painter = painterResource(R.drawable.logo),
-            contentDescription = "Logo"
-        )
-        WhiteText(stringResource(R.string.log_in_capital))
-        CustomTextField(
-            label = stringResource(R.string.nric),
-            fieldInput = nric,
-            validation = { validateNRIC(it) }
-        )
-        CustomTextField(
-            label = stringResource(R.string.password),
-            fieldInput = password,
-            validation = { validatePassword(it) },
-            isPasswordField = true
-        )
-        GreenButton(
-            text = stringResource(R.string.log_in),
-            onClick = {
-                // TODO - Check that there is a user existing in the database /  Just say incorrect
-                // TODO - Check that the login and password match, otherwise say incorrect
-                // TODO - Remove needing to click 3 times
-                loginViewModel.loginUser (nric.value.value, password.value.value)
-                if (loginViewModel.state.successState) {
-                    getUserIdViewModel.getUserId(nric.value.value)
-                    if(getUserIdViewModel.state.successState){
-                        toHome()
+    ){ padding ->
+        Column (
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "Logo"
+            )
+            WhiteText(stringResource(R.string.log_in_capital))
+            CustomTextField(
+                label = stringResource(R.string.nric),
+                fieldInput = nric,
+                validation = { validateNRIC(it) }
+            )
+            CustomTextField(
+                label = stringResource(R.string.password),
+                fieldInput = password,
+                validation = { validatePassword(it) },
+                isPasswordField = true
+            )
+            GreenButton(
+                text = stringResource(R.string.log_in),
+                onClick = {
+                    // TODO - Check that there is a user existing in the database /  Just say incorrect
+                    // TODO - Check that the login and password match, otherwise say incorrect
+                    // TODO - Remove needing to click 3 times
+                    loginViewModel.loginUser (nric.value.value, password.value.value)
+                    if (loginViewModel.state.successState) {
+                        getUserIdViewModel.getUserId(nric.value.value)
+                        if(getUserIdViewModel.state.successState){
+                            toHome()
+                        }
                     }
                 }
-            }
-        )
-        TextButton(
-            onClick = {}
-        ) {
-            Text(
-                stringResource(R.string.forgot_your_password),
-                textDecoration = TextDecoration.Underline
             )
         }
     }
+
 }

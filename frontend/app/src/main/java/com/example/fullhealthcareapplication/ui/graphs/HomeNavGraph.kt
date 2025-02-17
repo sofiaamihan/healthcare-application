@@ -17,8 +17,6 @@ import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.BottomNavigationScreen
 import com.example.fullhealthcareapplication.ui.screens.BlogScreen
 import com.example.fullhealthcareapplication.ui.screens.DiscoverScreen
-import com.example.fullhealthcareapplication.ui.screens.HealthLogsScreen
-import com.example.fullhealthcareapplication.ui.screens.HealthReportScreen
 import com.example.fullhealthcareapplication.ui.screens.HomeScreen
 import com.example.fullhealthcareapplication.ui.screens.MedicationScreen
 import com.example.fullhealthcareapplication.ui.screens.MobilityScreen
@@ -132,25 +130,25 @@ fun HomeNavGraph(
                 healthServiceViewModelFactory = healthServiceViewModelFactory
             )
         }
-        composable(route = DrawerScreen.HealthLogs.route){
-            HealthLogsScreen(
-                toProfile = {
-                    navController.navigate(DrawerScreen.Profile.route)
-                },
-                toHealthLogs = {
-                    navController.navigate(DrawerScreen.HealthLogs.route)
-                },
-                toHealthReport = {
-                    navController.navigate(DrawerScreen.HealthReport.route)
-                },
-                toHome = {
-                    navController.navigate(BottomNavigationScreen.Home.route)
-                }
-            )
-        }
-        composable(route = DrawerScreen.HealthReport.route){
-            HealthReportScreen()
-        }
+//        composable(route = DrawerScreen.HealthLogs.route){
+//            HealthLogsScreen(
+//                toProfile = {
+//                    navController.navigate(DrawerScreen.Profile.route)
+//                },
+//                toHealthLogs = {
+//                    navController.navigate(DrawerScreen.HealthLogs.route)
+//                },
+//                toHealthReport = {
+//                    navController.navigate(DrawerScreen.HealthReport.route)
+//                },
+//                toHome = {
+//                    navController.navigate(BottomNavigationScreen.Home.route)
+//                }
+//            )
+//        }
+//        composable(route = DrawerScreen.HealthReport.route){
+//            HealthReportScreen()
+//        }
         composable(route = SensorScreen.Physical.route){
             PhysicalScreen(
                 toHome = {

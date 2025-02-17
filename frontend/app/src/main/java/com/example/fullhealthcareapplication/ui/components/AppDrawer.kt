@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -51,8 +53,8 @@ data class NavigationItems(
 fun NavigationDrawer(
     title: String,
     toProfile: () -> Unit,
-    toHealthLogs: () -> Unit,
-    toHealthReport: () -> Unit,
+//    toHealthLogs: () -> Unit,
+//    toHealthReport: () -> Unit,
     toHome: () -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ){
@@ -60,12 +62,6 @@ fun NavigationDrawer(
         NavigationItems(
             title = "Profile"
         ),
-        NavigationItems(
-            title = "Health logs"
-        ),
-        NavigationItems(
-            title = "Health Report"
-        )
     )
 
     var selectedItemIndex = rememberSaveable {
@@ -109,14 +105,9 @@ fun NavigationDrawer(
                         label = { Text(text = item.title) },
                         selected = index == selectedItemIndex.value,
                         onClick = {
-                            // navigate
                             selectedItemIndex.value = index
                             if (index == 0) {
                                 toProfile()
-                            } else if (index == 1) {
-                                toHealthLogs()
-                            } else {
-                                toHealthReport()
                             }
                             scope.launch{
                                 drawerState.close()
@@ -157,17 +148,18 @@ fun NavigationDrawer(
                         }
                     },
                     actions = {
-                        Image(
-                            painter = painterResource(R.drawable.logo),
-                            contentDescription = "Logo",
-                            modifier = Modifier.fillMaxWidth(0.1f)
-                        )
-                        IconButton(
-                            onClick = {}
+                        Button(
+                            onClick = {
+                                toHome()
+                            },
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                            modifier = Modifier.offset(x = 16.dp)
                         ) {
-                            Icon(
-                                Icons.Default.Notifications,
-                                contentDescription = "Notifications"
+                            Image(
+                                painter = painterResource(R.drawable.logo),
+                                contentDescription = "Logo",
+                                modifier = Modifier.fillMaxWidth(0.2f)
                             )
                         }
                     },
