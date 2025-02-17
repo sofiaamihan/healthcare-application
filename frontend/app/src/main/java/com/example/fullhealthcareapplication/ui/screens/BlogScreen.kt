@@ -39,6 +39,7 @@ import com.example.fullhealthcareapplication.data.viewmodel.DeleteContentViewMod
 import com.example.fullhealthcareapplication.data.viewmodel.EditContentViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.GetAllContentCategoriesViewModel
 import com.example.fullhealthcareapplication.ui.components.BlogTitle
+import com.example.fullhealthcareapplication.ui.components.DeleteContentDialog
 import com.example.fullhealthcareapplication.ui.components.EditContentDialog
 
 @Composable
@@ -61,6 +62,7 @@ fun BlogScreen(
     val deleteContentViewModel: DeleteContentViewModel = viewModel(factory = viewModelFactory)
     val getAllContentCategoriesViewModel: GetAllContentCategoriesViewModel = viewModel(factory = viewModelFactory)
     var showEditContentModal = remember { mutableStateOf(false) }
+    var showDeleteContentModal = remember { mutableStateOf(false) }
     val categoriesState = getAllContentCategoriesViewModel.state
 
 
@@ -153,8 +155,7 @@ fun BlogScreen(
                         }
                         FilledTonalButton(
                             onClick = {
-                                deleteContentViewModel.deleteContent(id)
-                                toDiscoverScreen()
+                                showDeleteContentModal.value = true
                             },
                             modifier = Modifier.width(150.dp)
                         ) {
@@ -231,6 +232,16 @@ fun BlogScreen(
                 onDescriptionChange = { descriptionState.value = it },
                 picture = pictureState.value,
                 onPictureChange = { pictureState.value = it },
+            )
+        }
+        if(showDeleteContentModal.value){
+            DeleteContentDialog(
+                onDismiss = { showDeleteContentModal.value = false },
+                onDeleteContent = { id ->
+                    deleteContentViewModel.deleteContent(id)
+                    toDiscoverScreen()
+                },
+                id = id
             )
         }
     }

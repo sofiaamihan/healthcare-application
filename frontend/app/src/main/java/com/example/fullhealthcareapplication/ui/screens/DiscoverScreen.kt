@@ -50,8 +50,10 @@ fun DiscoverScreen(
     toHealthLogs: () -> Unit,
     toHealthReport: () -> Unit,
     toHome: () -> Unit,
+    toDiscoverScreen: () -> Unit,
     viewModelFactory: DiscoverServiceViewModelFactory,
     toBlogScreen: (Int, String, String, String, Int, String) -> Unit,
+
 ){
     val getAllContentViewModel: GetAllContentViewModel = viewModel(factory = viewModelFactory)
     val state = getAllContentViewModel.state

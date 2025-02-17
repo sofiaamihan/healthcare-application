@@ -85,6 +85,9 @@ fun HomeNavGraph(
                     navController.navigate(BottomNavigationScreen.Home.route)
                 },
                 viewModelFactory = discoverServiceViewModelFactory,
+                toDiscoverScreen = {
+                    navController.navigate(BottomNavigationScreen.Discover.route)
+                }
             ){ id, title, summary, description, contentCategoryId, role->
                 navController.navigate("${DiscoverScreen.Blog.route}/$id/$title/$summary/$description/$contentCategoryId/$role")
             }
