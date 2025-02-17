@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -99,118 +100,137 @@ fun BlogScreen(
             6 -> R.drawable.disease6
             else -> R.drawable.exercise2
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = { toDiscoverScreen() },
-                    modifier = Modifier
-                        .padding(16.dp, top = 32.dp)
-                ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-            }
-            Image(
-                painter = painterResource(bannerResId),
-                contentDescription = "Blog Image",
-                modifier = Modifier
-                    .padding(bottom = 24.dp)
-                    .clip(shape = RoundedCornerShape(32.dp))
-                    .fillMaxWidth(0.9f)
-                    .fillMaxHeight(0.3f),
-                contentScale = ContentScale.FillWidth
-            )
-            if (role == "Admin") {
+            item {
                 Row(
-                    modifier = Modifier
-                        .padding(start = 32.dp, end = 32.dp, bottom = 24.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    FilledTonalButton(
-                        onClick = {
-                            showEditContentModal.value = true
-                        },
-                        modifier = Modifier
-                            .width(150.dp)
+                    IconButton(
+                        onClick = { toDiscoverScreen() },
+                        modifier = Modifier.padding(16.dp, top = 32.dp)
                     ) {
-                        Text("Edit")
-                    }
-                    FilledTonalButton(
-                        onClick = {
-                            deleteContentViewModel.deleteContent(id)
-                            toDiscoverScreen()
-                        },
-                        modifier = Modifier
-                            .width(150.dp)
-                    ) {
-                        Text("Delete")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }
             }
-            BlogTitle(title)
-            if(names.isNotEmpty()){
+
+            item {
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Image(
+                        painter = painterResource(bannerResId),
+                        contentDescription = "Blog Image",
+                        modifier = Modifier
+                            .padding(bottom = 24.dp)
+                            .clip(shape = RoundedCornerShape(32.dp))
+                            .fillMaxWidth(0.9f)
+                            .fillMaxHeight(0.3f),
+                        contentScale = ContentScale.FillWidth
+                    )
+                }
+            }
+
+            if (role == "Admin") {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 32.dp, end = 32.dp, bottom = 24.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        FilledTonalButton(
+                            onClick = { showEditContentModal.value = true },
+                            modifier = Modifier.width(150.dp)
+                        ) {
+                            Text("Edit")
+                        }
+                        FilledTonalButton(
+                            onClick = {
+                                deleteContentViewModel.deleteContent(id)
+                                toDiscoverScreen()
+                            },
+                            modifier = Modifier.width(150.dp)
+                        ) {
+                            Text("Delete")
+                        }
+                    }
+                }
+            }
+
+            item { BlogTitle(title) }
+
+            if (names.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Category: ${names[contentCategoryId - 1]}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            item {
                 Text(
-                    text = "Category: ${names[contentCategoryId-1]}",
+                    text = summary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
                 )
             }
-            Text(
-                text = summary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
-            )
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
-            )
-            Text(
-                // Need to make this entire thing scrollable
-                text = description,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
-            )
-            if (showEditContentModal.value) {
-                EditContentDialog(
-                    onDismiss = { showEditContentModal.value = false },
-                    onEditContent = { id, categoryId, title, summary, description, picture ->
-                        editContentViewModel.editContent(
-                            id,
-                            categoryId,
-                            title,
-                            summary,
-                            description,
-                            picture
-                        )
-                        showEditContentModal.value = false
-                    },
-                    id = id,
-                    contentCategoryId = contentCategoryIdState.intValue,
-                    onContentCategoryIdChange = { contentCategoryIdState.intValue = it },
-                    title = titleState.value,
-                    onTitleChange = { titleState.value = it },
-                    summary = summaryState.value,
-                    onSummaryChange = { summaryState.value = it },
-                    description = descriptionState.value,
-                    onDescriptionChange = { descriptionState.value = it },
-                    picture = pictureState.value,
-                    onPictureChange = { pictureState.value = it }
+
+            item {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
                 )
             }
+
+            item {
+                Text(
+                    text = description,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+                )
+            }
+        }
+        if (showEditContentModal.value) {
+            EditContentDialog(
+                onDismiss = { showEditContentModal.value = false },
+                onEditContent = { id, categoryId, title, summary, description, picture ->
+                    editContentViewModel.editContent(
+                        id,
+                        categoryId,
+                        title,
+                        summary,
+                        description,
+                        picture
+                    )
+                    showEditContentModal.value = false
+                },
+                id = id,
+                contentCategoryId = contentCategoryIdState.intValue,
+                onContentCategoryIdChange = { contentCategoryIdState.intValue = it },
+                title = titleState.value,
+                onTitleChange = { titleState.value = it },
+                summary = summaryState.value,
+                onSummaryChange = { summaryState.value = it },
+                description = descriptionState.value,
+                onDescriptionChange = { descriptionState.value = it },
+                picture = pictureState.value,
+                onPictureChange = { pictureState.value = it }
+            )
         }
     }
 }
