@@ -83,7 +83,7 @@ fun DiscoverScreen(
         if (role.value == "Admin"){
             Box(
                 modifier = Modifier
-                    .padding(top = 200.dp)
+                    .padding(top = padding.calculateTopPadding())
                     .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
                     .fillMaxWidth()
                     .height(80.dp)

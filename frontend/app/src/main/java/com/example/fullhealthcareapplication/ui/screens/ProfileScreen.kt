@@ -120,7 +120,7 @@ fun ProfileScreen(
     ){ padding ->
         Box(
             modifier = Modifier
-                .padding(top = 200.dp)
+                .padding(top = padding.calculateTopPadding())
                 .clip(RoundedCornerShape(bottomStart = 38.dp, bottomEnd = 38.dp))
                 .height(20.dp)
                 .fillMaxWidth()

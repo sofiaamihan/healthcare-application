@@ -125,14 +125,14 @@ fun PhysicalScreen(
         title = "Physical",
         toHome = {toHome()}
     )
-    Box(
-        modifier = Modifier
-            .padding(top = 110.dp)
-            .clip(RoundedCornerShape(bottomStart = 38.dp, bottomEnd = 38.dp))
-            .height(20.dp)
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.secondaryContainer)
-    )
+//    Box(
+//        modifier = Modifier
+//            .padding(top = 110.dp)
+//            .clip(RoundedCornerShape(bottomStart = 38.dp, bottomEnd = 38.dp))
+//            .height(20.dp)
+//            .fillMaxWidth()
+//            .background(color = MaterialTheme.colorScheme.secondaryContainer)
+//    )
     Column (
         modifier = Modifier
             .fillMaxSize()
