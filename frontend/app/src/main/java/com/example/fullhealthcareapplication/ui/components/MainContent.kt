@@ -59,7 +59,6 @@ fun MainContent(
 
     val userId = remember { mutableIntStateOf(0) }
     val activityCategoryId = remember { mutableIntStateOf(0) }
-    val timeTaken = remember { mutableStateOf("") }
     val caloriesBurnt = remember { mutableDoubleStateOf(0.0) }
     val stepCount = remember { mutableDoubleStateOf(0.0) }
     val distance = remember { mutableDoubleStateOf(0.0) }
@@ -108,8 +107,6 @@ fun MainContent(
             userId = userId.intValue,
             activityCategoryId = activityCategoryId.intValue,
             onActivityCategoryIdChange = { activityCategoryId.intValue = it },
-            timeTaken = timeTaken.value,
-            onTimeTakenChange = { timeTaken.value = it },
             caloriesBurnt = caloriesBurnt.doubleValue,
             onCaloriesBurntChange = { caloriesBurnt.doubleValue = it },
             stepCount = stepCount.doubleValue,
