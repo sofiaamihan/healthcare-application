@@ -147,7 +147,6 @@ fun HomeScreen(
     ){ padding ->
         Box(
             modifier = Modifier
-//                .padding(top = 200.dp)
                 .padding(top = padding.calculateTopPadding())
                 .clip(RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
                 .fillMaxWidth()
@@ -178,7 +177,7 @@ fun HomeScreen(
         Text(
             text = "Today, $current",
             modifier = Modifier
-                .padding(top = 270.dp, start = 32.dp)
+                .padding(top = 290.dp, start = 22.dp)
         )
         Column (
             modifier = Modifier
