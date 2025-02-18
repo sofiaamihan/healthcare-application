@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const lambda = require('../index'); // Adjust according to your Lambda file path
+const lambda = require('../index'); 
 
 jest.mock('mysql', () => {
     const mQuery = jest.fn();
@@ -13,7 +13,7 @@ jest.mock('mysql', () => {
     };
 });
 
-describe('Lambda GET /info/{nric}', () => {
+describe('GET /info/{nric}', () => {
     let callback;
     let context;
 
@@ -22,7 +22,7 @@ describe('Lambda GET /info/{nric}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should return a user based on NRIC', async () => {
+    it('Should return a User based on NRIC', async () => {
         const mockUser = {
             id: 1,
             nric: "S1234567A",
@@ -49,7 +49,7 @@ describe('Lambda GET /info/{nric}', () => {
     });
 });
 
-describe('Lambda POST /user', () => {
+describe('POST /user', () => {
     let callback;
     let context;
 
@@ -58,7 +58,7 @@ describe('Lambda POST /user', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should insert a new user and return success', async () => {
+    it('Should insert a new User and return a Success Response', async () => {
         const mockInsertResponse = { insertId: 1 };
         const newUser = {
             nric: "S1234567A",
@@ -85,7 +85,7 @@ describe('Lambda POST /user', () => {
     });
 });
 
-describe('Lambda PUT /user/{id}', () => {
+describe('PUT /user/{id}', () => {
     let callback;
     let context;
 
@@ -94,7 +94,7 @@ describe('Lambda PUT /user/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should update user measurements and return success', async () => {
+    it('Should update User measurements and return a Success Response', async () => {
         const mockUpdateResponse = { changedRows: 1 };
         const updatedUser = {
             age: 26,
@@ -124,7 +124,7 @@ describe('Lambda PUT /user/{id}', () => {
     });
 });
 
-describe('Lambda DELETE /user/{id}', () => {
+describe('DELETE /user/{id}', () => {
     let callback;
     let context;
 
@@ -133,7 +133,7 @@ describe('Lambda DELETE /user/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should delete user and return success', async () => {
+    it('Should delete a User and return a Success Response', async () => {
         const mockDeleteResponse = { affectedRows: 1 };
 
         mysql.createConnection().query.mockImplementation((sql, values, callback) => {
@@ -156,7 +156,7 @@ describe('Lambda DELETE /user/{id}', () => {
     });
 });
 
-describe('Lambda GET /activity/{user_id}/{day}', () => {
+describe('GET /activity/{user_id}/{day}', () => {
     let callback;
     let context;
 
@@ -165,7 +165,7 @@ describe('Lambda GET /activity/{user_id}/{day}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should return activities for a user on a specific day', async () => {
+    it('Should return a list of Activities for a User on a specific Day', async () => {
         const mockActivities = [
             { id: 1, user_id: "1", time_taken: "2025-02-15 10:00:00", calories_burnt: 100, step_count: 2000, distance: 2, walking_speed: 4, walking_steadiness: 0.8 },
             { id: 2, user_id: "1", time_taken: "2025-02-15 12:00:00", calories_burnt: 150, step_count: 3000, distance: 3, walking_speed: 4.5, walking_steadiness: 0.9 }
@@ -187,7 +187,7 @@ describe('Lambda GET /activity/{user_id}/{day}', () => {
     });
 });
 
-describe('Lambda POST /activity', () => {
+describe('POST /activity', () => {
     let callback;
     let context;
 
@@ -196,7 +196,7 @@ describe('Lambda POST /activity', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should insert a new activity and return success', async () => {
+    it('Should insert a new Activity and return a Success Response', async () => {
         const mockInsertResponse = { insertId: 1 };
         const newActivity = {
             user_id: "1",
@@ -225,7 +225,7 @@ describe('Lambda POST /activity', () => {
     });
 });
 
-describe('Lambda PUT /activity/{id}', () => {
+describe('PUT /activity/{id}', () => {
     let callback;
     let context;
 
@@ -234,7 +234,7 @@ describe('Lambda PUT /activity/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should update activity details and return success', async () => {
+    it('Should update Activity details and return a Success Response', async () => {
         const mockUpdateResponse = { changedRows: 1 };
         const updatedActivity = {
             time_taken: "2025-02-15 16:00:00",
@@ -266,7 +266,7 @@ describe('Lambda PUT /activity/{id}', () => {
     });
 });
 
-describe('Lambda DELETE /activity/{id}', () => {
+describe('DELETE /activity/{id}', () => {
     let callback;
     let context;
 
@@ -275,7 +275,7 @@ describe('Lambda DELETE /activity/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should delete an activity and return success', async () => {
+    it('Should delete an Activity and return a Success Response', async () => {
         const mockDeleteResponse = { affectedRows: 1 };
 
         mysql.createConnection().query.mockImplementation((sql, values, callback) => {
@@ -298,7 +298,7 @@ describe('Lambda DELETE /activity/{id}', () => {
     });
 });
 
-describe('Lambda GET /medication/{user_id}', () => {
+describe('GET /medication/{user_id}', () => {
     let callback;
     let context;
 
@@ -307,10 +307,10 @@ describe('Lambda GET /medication/{user_id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should return all medications for a user', async () => {
+    it('Should return all Medications for a User', async () => {
         const mockMedications = [
-            { id: 1, user_id: "1", name: "Med1", type: "Type1", measure_amount: 10, measure_unit: "mg", frequency: "once" },
-            { id: 2, user_id: "1", name: "Med2", type: "Type2", measure_amount: 20, measure_unit: "mg", frequency: "twice" }
+            { id: 1, user_id: "1", name: "Med1", type: "Capsule", measure_amount: 10, measure_unit: "mg", frequency: "Daily" },
+            { id: 2, user_id: "1", name: "Med2", type: "Liquid", measure_amount: 20, measure_unit: "mg", frequency: "Weekly" }
         ];
 
         mysql.createConnection().query.mockImplementation((sql, values, callback) => {
@@ -329,7 +329,7 @@ describe('Lambda GET /medication/{user_id}', () => {
     });
 });
 
-describe('Lambda POST /medication', () => {
+describe('POST /medication', () => {
     let callback;
     let context;
 
@@ -338,7 +338,7 @@ describe('Lambda POST /medication', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should insert a new medication and return success', async () => {
+    it('Should insert a new Medication and return a Success Response', async () => {
         const mockInsertResponse = { insertId: 1 };
         const newMedication = {
             user_id: "1",
@@ -366,7 +366,7 @@ describe('Lambda POST /medication', () => {
     });
 });
 
-describe('Lambda PUT /medication/{id}', () => {
+describe('PUT /medication/{id}', () => {
     let callback;
     let context;
 
@@ -375,7 +375,7 @@ describe('Lambda PUT /medication/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should update medication details and return success', async () => {
+    it('Should update specified Medication details and return a Success Response', async () => {
         const mockUpdateResponse = { changedRows: 1 };
         const updatedMedication = {
             time_id: "time2",
@@ -407,7 +407,7 @@ describe('Lambda PUT /medication/{id}', () => {
     });
 });
 
-describe('Lambda DELETE /medication/{id}', () => {
+describe('DELETE /medication/{id}', () => {
     let callback;
     let context;
 
@@ -416,7 +416,7 @@ describe('Lambda DELETE /medication/{id}', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should delete a medication and return success', async () => {
+    it('Should delete a Medication and return a Success Response', async () => {
         const mockDeleteResponse = { affectedRows: 1 };
 
         mysql.createConnection().query.mockImplementation((sql, values, callback) => {
@@ -439,7 +439,7 @@ describe('Lambda DELETE /medication/{id}', () => {
     });
 });
 
-describe('Lambda GET /category', () => {
+describe('GET /category', () => {
     let callback;
     let context;
 
@@ -448,7 +448,7 @@ describe('Lambda GET /category', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should return all categories', async () => {
+    it('Should return all Categories', async () => {
         const mockCategories = [
             { id: 1, name: "Walking" },
             { id: 2, name: "Running" }
@@ -469,7 +469,7 @@ describe('Lambda GET /category', () => {
     });
 });
 
-describe('Lambda GET /time', () => {
+describe('GET /time', () => {
     let callback;
     let context;
 
@@ -478,7 +478,7 @@ describe('Lambda GET /time', () => {
         context = { callbackWaitsForEmptyEventLoop: false };
     });
 
-    it('Should return all time slots', async () => {
+    it('Should return all Time Slots', async () => {
         const mockTimes = [
             { id: 1, time_slot: "09:00" },
             { id: 2, time_slot: "10:00" }
