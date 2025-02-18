@@ -13,7 +13,7 @@ jest.mock('mysql', () => {
     };
 });
 
-describe('Lambda GET /content', () => {
+describe('GET /content', () => {
     let callback;
     let context;
     
@@ -50,7 +50,7 @@ describe('Lambda GET /content', () => {
 
 });
 
-describe('Lambda GET /content-category', () => {
+describe('GET /content-category', () => {
     let callback;
     let context;
     
@@ -81,7 +81,7 @@ describe('Lambda GET /content-category', () => {
 
 });
 
-describe('Lambda POST /content', () => {
+describe('POST /content', () => {
     let callback;
     let context;
     
@@ -117,7 +117,7 @@ describe('Lambda POST /content', () => {
 
 });
 
-describe('Lambda PUT /content', () => {
+describe('PUT /content/{id}', () => {
     let callback;
     let context;
     
@@ -159,7 +159,7 @@ describe('Lambda PUT /content', () => {
 
 });
 
-describe('Lambda DELETE /content/{id}', () => {
+describe('DELETE /content/{id}', () => {
     let callback;
     let context;
 
