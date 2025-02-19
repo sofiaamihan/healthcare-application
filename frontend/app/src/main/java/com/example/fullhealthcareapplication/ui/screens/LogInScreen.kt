@@ -50,8 +50,6 @@ fun LogInScreen(
     val loginViewModel: LoginViewModel = viewModel(factory = userInfoViewModelFactory)
     val getUserIdViewModel: GetUserIdViewModel = viewModel(factory = healthServiceViewModelFactory)
 
-    val state by loginViewModel.state.collectAsState()
-
 
     Back(
         toBack = {toWelcome()},
