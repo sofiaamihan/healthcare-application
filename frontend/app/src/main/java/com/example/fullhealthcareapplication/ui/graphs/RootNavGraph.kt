@@ -18,7 +18,6 @@ import com.example.fullhealthcareapplication.data.preferences.TokenDataStore
 import com.example.fullhealthcareapplication.data.factory.DiscoverServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.HealthServiceViewModelFactory
 import com.example.fullhealthcareapplication.data.factory.UserInfoViewModelFactory
-import com.example.fullhealthcareapplication.data.viewmodel.GetOnboardingStatusViewModel
 import com.example.fullhealthcareapplication.data.viewmodel.SensorViewModel
 import com.example.fullhealthcareapplication.ui.components.MainContent
 import kotlinx.coroutines.flow.first

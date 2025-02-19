@@ -554,52 +554,6 @@ class GetAllActivitiesViewModel(
     }
 }
 
-class GetOnboardingStatusViewModel(
-    private val healthServiceRepository: HealthServiceRepository
-): ViewModel() {
-    var state by mutableStateOf(HealthResultState())
-    fun getOnboardingStatus(
-        userId: Int,
-    ) {
-        viewModelScope.launch {
-            state = state.copy(loadingState = true)
-
-            val result = healthServiceRepository.getOnboardingStatus(userId)
-            if(result != null){
-                state = state.copy(successState = true)
-                state.onboardingStatus = result
-            } else {
-                state = state.copy(errorState = true, errorMessage = "Get Status Failed")
-            }
-            state = state.copy(loadingState = false)
-
-        }
-    }
-}
-
-class UpdateOnboardingStatusViewModel(
-    private val healthServiceRepository: HealthServiceRepository
-): ViewModel() {
-    var state by mutableStateOf(HealthResultState())
-    fun updateOnboardingStatus(
-        userId: Int,
-        onboarding: Boolean
-    ) {
-        viewModelScope.launch {
-            state = state.copy(loadingState = true)
-
-            val result = healthServiceRepository.updateOnboardingStatus(userId, onboarding)
-            if(result != null){
-                state = state.copy(successState = true)
-            } else {
-                state = state.copy(errorState = true, errorMessage = "Update Status Failed")
-            }
-            state = state.copy(loadingState = false)
-
-        }
-    }
-}
-
 class AddUserMeasurementsViewModel(
     private val healthServiceRepository: HealthServiceRepository
 ): ViewModel() {

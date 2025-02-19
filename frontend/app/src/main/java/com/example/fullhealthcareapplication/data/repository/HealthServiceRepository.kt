@@ -74,7 +74,6 @@ class HealthServiceRepository(
     private val medicationDao = database.medicationDao
     private val categoryDao = database.categoryDao
     private val timeDao = database.timeDao
-    private val onboardingDao = database.onboardingDao
 
     private val baseUrl = "https://f5fqqafe6e.execute-api.us-east-1.amazonaws.com"
 
@@ -950,22 +949,4 @@ class HealthServiceRepository(
             return@withContext activityDao.getAllActivities(userId, date)
         }
     }
-
-    suspend fun getOnboardingStatus(
-        userId: Int
-    ): Boolean {
-        return withContext(Dispatchers.IO) {
-            return@withContext onboardingDao.getOnboardingStatus(userId)
-        }
-    }
-
-    suspend fun updateOnboardingStatus(
-        userId: Int,
-        onboarding: Boolean
-    ){
-        return withContext(Dispatchers.IO) {
-            return@withContext onboardingDao.updateOnboardingStatus(userId, onboarding)
-        }
-    }
-
 }
