@@ -66,7 +66,7 @@ fun SignUpScreen(
 
     val signUpViewModel: SignUpViewModel = viewModel(factory = viewModelFactory)
 
-    val scrollState = rememberScrollState() // For vertical scroll in the future
+    val scrollState = rememberScrollState()
 
     Box (
         modifier = Modifier.fillMaxSize()
@@ -168,8 +168,6 @@ fun SignUpScreen(
                             Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
                             return@GreenButton
                         }
-
-                        // TODO - Needs checking like if there is already an account associated to the email
                         signUpViewModel.signUpUser(
                             nric.value.value,
                             roleState.value,
@@ -178,7 +176,6 @@ fun SignUpScreen(
                             password.value.value
                         )
                         if (signUpViewModel.state.successState){
-
                             toOnboarding(
                                 nric.value.value,
                                 roleState.value

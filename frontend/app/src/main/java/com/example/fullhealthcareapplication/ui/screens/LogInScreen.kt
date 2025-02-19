@@ -5,9 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.collectAsState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -46,6 +50,9 @@ fun LogInScreen(
     val loginViewModel: LoginViewModel = viewModel(factory = userInfoViewModelFactory)
     val getUserIdViewModel: GetUserIdViewModel = viewModel(factory = healthServiceViewModelFactory)
 
+    val state by loginViewModel.state.collectAsState()
+
+
     Back(
         toBack = {toWelcome()},
         color = Color.White
@@ -74,16 +81,10 @@ fun LogInScreen(
             GreenButton(
                 text = stringResource(R.string.log_in),
                 onClick = {
-                    // TODO - Check that there is a user existing in the database /  Just say incorrect
-                    // TODO - Check that the login and password match, otherwise say incorrect
-                    // TODO - Remove needing to click 3 times
                     loginViewModel.loginUser (nric.value.value, password.value.value)
-                    if (loginViewModel.state.successState) {
-                        getUserIdViewModel.getUserId(nric.value.value)
-                        if(getUserIdViewModel.state.successState){
-                            toHome()
-                        }
-                    }
+//                    if (loginViewModel.state.successState) {
+//                        toHome()
+//                    }
                 }
             )
         }

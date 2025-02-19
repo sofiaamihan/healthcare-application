@@ -74,13 +74,14 @@ class MainActivity : ComponentActivity(){
         sensorViewModel.startListening()
 
 
-        val userInfoRepository = UserInfoRepository(TokenDataStore(this))
-        val userInfoViewModelFactory = UserInfoViewModelFactory(userInfoRepository)
+
         val discoverServiceRepository = DiscoverServiceRepository(TokenDataStore(this))
         val discoverServiceViewModelFactory =
             DiscoverServiceViewModelFactory(discoverServiceRepository)
         val healthServiceRepository = HealthServiceRepository(TokenDataStore(this), this)
         val healthServiceViewModelFactory = HealthServiceViewModelFactory(healthServiceRepository)
+        val userInfoRepository = UserInfoRepository(TokenDataStore(this))
+        val userInfoViewModelFactory = UserInfoViewModelFactory(userInfoRepository, healthServiceRepository)
 
 
         enableEdgeToEdge()

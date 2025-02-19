@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fullhealthcareapplication.data.repository.HealthServiceRepository
 import com.example.fullhealthcareapplication.data.repository.UserInfoRepository
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 data class ResultState(
@@ -18,16 +20,22 @@ data class ResultState(
 
 class LoginViewModel(
     private val userInfoRepository: UserInfoRepository,
+    private val healthServiceRepository: HealthServiceRepository,
 ) : ViewModel() {
     var state by mutableStateOf(ResultState())
+    var localState by mutableStateOf(HealthResultState())
 
     fun loginUser (nric:String, password: String) {
         viewModelScope.launch {
             state = state.copy(loadingState = true)
             val response = userInfoRepository.userLogin(nric, password)
             if(response != null){
-                state = state.copy(successState = true)
+//                state = state.copy(successState = true)
                 // I can also access the token, nric, and role from the response
+                val localResponse = healthServiceRepository.getUserId(nric)
+                if (localResponse != null){
+                    state = state.copy(successState = true)
+                }
             } else {
                 state = state.copy(errorState = true, errorMessage = "Login failed")
             }
