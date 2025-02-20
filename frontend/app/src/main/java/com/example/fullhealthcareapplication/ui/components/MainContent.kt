@@ -51,6 +51,7 @@ fun MainContent(
     healthServiceViewModelFactory: HealthServiceViewModelFactory,
     tokenDataStore: TokenDataStore,
     toSignOut: () -> Unit,
+    toHome: () -> Unit,
     sensorViewModel: SensorViewModel
 ){
     var search = remember { mutableStateOf("") }
@@ -103,6 +104,7 @@ fun MainContent(
             onAddActivity = { userId, activityCategoryId, timeTaken, caloriesBurnt, stepCount, distance, walkingSpeed, walkingSteadiness ->
                 addActivityViewModel.addActivity(userId, activityCategoryId, timeTaken, caloriesBurnt, stepCount, distance, walkingSpeed, walkingSteadiness)
                 showAddActivityDialog.value = false
+                toHome()
             },
             userId = userId.intValue,
             activityCategoryId = activityCategoryId.intValue,

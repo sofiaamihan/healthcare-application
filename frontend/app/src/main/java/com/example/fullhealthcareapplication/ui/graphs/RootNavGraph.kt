@@ -66,6 +66,9 @@ fun RootNavigationGraph(
                         }
                     }
                 },
+                toHome = {
+                    navController.navigate(Graph.HOME)
+                },
                 sensorViewModel = sensorViewModel
             )
         }

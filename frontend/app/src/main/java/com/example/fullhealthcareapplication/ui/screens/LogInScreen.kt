@@ -80,9 +80,9 @@ fun LogInScreen(
                 text = stringResource(R.string.log_in),
                 onClick = {
                     loginViewModel.loginUser (nric.value.value, password.value.value)
-//                    if (loginViewModel.state.successState) {
-//                        toHome()
-//                    }
+                    if (loginViewModel.state.successState) {
+                        toHome()
+                    }
                 }
             )
         }

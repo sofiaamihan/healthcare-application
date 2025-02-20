@@ -53,6 +53,7 @@ import com.example.fullhealthcareapplication.ui.components.ChangePasswordDialog
 import com.example.fullhealthcareapplication.ui.components.DeleteAccountDialog
 import com.example.fullhealthcareapplication.ui.components.EditMeasurementsDialog
 import com.example.fullhealthcareapplication.ui.components.EditProfileDialog
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -294,6 +295,7 @@ fun ProfileScreen(
                 onEditMeasurements = { id, nric, role, age, gender, weight, height ->
                     editUserMeasurementsViewModel.editUserMeasurements(id, nric, role, age, gender, weight, height)
                     showMeasurementsModal.value = false
+                    toHome()
                 },
                 id = id.intValue,
                 nric = nric.value,
