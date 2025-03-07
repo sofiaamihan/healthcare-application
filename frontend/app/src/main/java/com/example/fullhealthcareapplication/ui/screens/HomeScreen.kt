@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,6 +62,7 @@ import com.example.fullhealthcareapplication.data.viewmodel.GetUserIdViewModel
 import com.example.fullhealthcareapplication.ui.components.BigButton
 import com.example.fullhealthcareapplication.ui.components.NavigationDrawer
 import com.example.fullhealthcareapplication.ui.components.StepCounterBarGraph
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -112,6 +116,7 @@ fun HomeScreen(
     val remoteAState = getActivitiesViewModel.state
     val localAState = getAllActivitiesViewModel.state
     val scope = rememberCoroutineScope()
+    val buttonVisibility = remember { mutableStateOf(List(filteredButtons.size) { false }) }
 
     LaunchedEffect(Unit) {
         getCategoriesViewModel.getCategories()
@@ -124,6 +129,13 @@ fun HomeScreen(
         Log.d("Launch T", "${remoteTState.timeList}")
         Log.d("Launch M", "${remoteMState.medicationList}")
         Log.d("Launch A", "${remoteAState.activityList}")
+
+        filteredButtons.indices.forEach { index ->
+            delay(200L * index)  // Adjust delay to control the appearance timing
+            buttonVisibility.value = buttonVisibility.value.toMutableList().apply {
+                this[index] = true
+            }
+        }
     }
     LaunchedEffect(localState){
         // TODO - you have to reload this page to properly get
@@ -138,6 +150,7 @@ fun HomeScreen(
         Log.d("Scope2", "${localTState.cachedTimeList}")
         Log.d("Scope3", "${localMState.cachedMedicationList}")
         Log.d("Scope4", "${localAState.cachedActivityList}")
+
     }
 
     NavigationDrawer(
@@ -186,11 +199,14 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ){
-            filteredButtons.forEach { (label, icon, action) ->
-                Row (
-                    modifier = Modifier.padding(bottom = 10.dp)
-                ){
-                    BigButton(label, icon, toSensorScreen = { action() })
+            filteredButtons.forEachIndexed { index, (label, icon, action) ->
+                AnimatedVisibility(
+                    visible = buttonVisibility.value[index],
+                    enter = fadeIn() + slideInVertically(initialOffsetY = { it })
+                ) {
+                    Row(modifier = Modifier.padding(bottom = 10.dp)) {
+                        BigButton(label, icon, toSensorScreen = { action() })
+                    }
                 }
             }
         }

@@ -1,6 +1,9 @@
 package com.example.fullhealthcareapplication.ui.graphs
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +32,22 @@ fun NavGraphBuilder.authNavGraph(
         route = Graph.AUTHENTICATION,
         startDestination = AuthScreen.Welcome.route // To test the onboarding
     ){
-        composable(route = AuthScreen.Login.route){
+        composable(
+            route = AuthScreen.Login.route,
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                )
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                )
+            }
+        ){
             LogInScreen(
                 userInfoViewModelFactory = userInfoViewModelFactory,
                 healthServiceViewModelFactory = healthServiceViewModelFactory,
@@ -43,7 +61,22 @@ fun NavGraphBuilder.authNavGraph(
                 }
             )
         }
-        composable(route = AuthScreen.SignUp.route){
+        composable(
+            route = AuthScreen.SignUp.route,
+            enterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                )
+            }, exitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
+            }, popEnterTransition = {
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                )
+            }
+            ){
             SignUpScreen(
                 viewModelFactory = userInfoViewModelFactory,
                 toWelcome = {
