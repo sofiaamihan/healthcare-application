@@ -11,6 +11,7 @@ A centralised and secure mobile application designed for individuals to convenie
 - **AWS Cloud Integration**: Ensures secure remote storage and data synchronisation.
 - **Locked Elements**: Only Admins are allowed to create, edit, and delete health insights provided by the Blogs in the Discover section.
 - **Sensor Integration**: Information obtained via Accelerometer and Gyroscope is displayed live through Jetpack Compose Graphs that have been custom made via Canvas.
+- **Camera Integration**: Users can customise their profile photo by picking a picture from their gallery or using the camera.
 
 ## Architecture
 Follows a clean MVVM (Model-View-ViewModel) Architecture consisting of:
@@ -38,6 +39,7 @@ Kotlin, Jetpack Compose, Room Database, Respective Extensions and Coroutines Sup
   - ```androidx.room.compiler```
   - ```androidx.runtime.livedata```
   - ```androidx.room.ktx```
+- **Coil Image Upload**: ```libs.coil.compose```
 
 ### Backend (AWS Services)
 - **Authentication**: AWS Lambda Authorizer
