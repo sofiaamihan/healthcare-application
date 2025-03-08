@@ -19,8 +19,8 @@ Follows a clean MVVM (Model-View-ViewModel) Architecture consisting of:
 - **DAO (Data Access Object)**: Provides methods for accessing the database.
 - **Database**: The Room database that holds the notes data.
 - **Repository**:  Acts as the single source of truth, managing data flow from local (Room) and remote (AWS) sources, ensuring the mediation between the data sources (DAO) and the ViewModel.
-- **ViewModel**:: Manages UI-related data in a lifecycle-conscious way.
-- **ViewModel Factory**:: Creates instances of the ViewModel with the required parameters.
+- **ViewModel**: Manages UI-related data in a lifecycle-conscious way.
+- **ViewModel Factory**: Creates instances of the ViewModel with the required parameters.
 
 ## Tech Stack
 Kotlin, Jetpack Compose, Room Database, Respective Extensions and Coroutines Support, Android Architecture Components (ViewModel, LiveData)
