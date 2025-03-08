@@ -85,6 +85,9 @@ dependencies {
     // CameraX Icons
     implementation(libs.material.icons.extended)
 
+    // Coil
+    implementation(libs.coil.compose)
+
     // Sensors
 //    implementation(libs.hilt.android.v2x)
 //    kapt (libs.hilt.compiler)
