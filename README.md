@@ -1,6 +1,6 @@
 # Healthcare Application
 A centralised and secure mobile application designed for individuals to conveniently monitor, track, and log their health-related information built using Kotlin and Jetpack Compose. Users can access scheduling tools, view trends, and get reliable health insights from our admins. This application integrates a local Room Database for offline storage and AWS for remote data management, ensuring accessibility, reliability, security, and data integrity. Modern Android development practices have been followed, including MVVM architecture, Jetpack components, and efficient state management.
-![Example](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/example.png)
+![Main](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/main.png)
 
 ## Features
 - **User Authentication**: Secure login and registration system provided by AWS Lambda Authorizer.
@@ -22,6 +22,15 @@ Follows a clean MVVM (Model-View-ViewModel) Architecture consisting of:
 - **Repository**:  Acts as the single source of truth, managing data flow from local (Room) and remote (AWS) sources, ensuring the mediation between the data sources (DAO) and the ViewModel.
 - **ViewModel**: Manages UI-related data in a lifecycle-conscious way.
 - **ViewModel Factory**: Creates instances of the ViewModel with the required parameters.
+
+## Authentication & Onboarding System
+![Authentication](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/auth.png)
+
+## Components
+![Components](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/auth.png)
+
+### Navigation System
+![Nav](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/nav.png)
 
 ## Tech Stack
 Kotlin, Jetpack Compose, Room Database, Respective Extensions and Coroutines Support, Android Architecture Components (ViewModel, LiveData)
