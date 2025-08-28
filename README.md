@@ -1,4 +1,4 @@
-# Full Healthcare Application
+# Healthcare Application
 A centralised and secure mobile application designed for individuals to conveniently monitor, track, and log their health-related information built using Kotlin and Jetpack Compose. Users can access scheduling tools, view trends, and get reliable health insights from our admins. This application integrates a local Room Database for offline storage and AWS for remote data management, ensuring accessibility, reliability, security, and data integrity. Modern Android development practices have been followed, including MVVM architecture, Jetpack components, and efficient state management.
 ![Example](https://github.com/sofiaamihan/full-healthcare-application/blob/main/data/example.png)
 
